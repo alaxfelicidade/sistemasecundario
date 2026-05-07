@@ -1,0 +1,2184 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sistema de Reembolso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg:#f4f7fb;--card:#fff;--text:#142033;--muted:#687487;--line:#e3e9f2;
+  --green:#0b8f6a;--green2:#e8fff7;--blue:#2563eb;--red:#ef4444;--orange:#f59e0b;
+  --dark:#111827;--soft:#eef7ff;--shadow:0 12px 30px rgba(15,23,42,.08);--radius:22px
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:linear-gradient(135deg,#f7fbff,#eef7f2);
+  font-family:'Plus Jakarta Sans',Arial,sans-serif;color:var(--text);letter-spacing:-.01em
+}
+button,input,select,textarea{font-family:inherit}
+.app{max-width:1280px;margin:auto;padding:18px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:18px;margin-bottom:16px
+}
+.top{
+  position:sticky;top:0;z-index:20;background:rgba(244,247,251,.86);backdrop-filter:blur(14px);
+  border:0;border-bottom:1px solid var(--line);border-radius:0;padding:12px 0;margin:0 0 14px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:none
+}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{
+  width:56px;height:56px;border-radius:16px;object-fit:cover;background:#fff;
+  box-shadow:var(--shadow);border:0;padding:0
+}
+h1{font-size:24px;margin:0;font-weight:900;letter-spacing:-.04em;line-height:1.08}
+h2{font-size:19px;margin:0 0 8px;font-weight:900;letter-spacing:-.03em;line-height:1.15}
+.sub{font-size:12px;color:var(--muted);margin-top:3px}.mini{font-size:12px;color:var(--muted);margin-top:5px}
+.tabs,.topActions,.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tabs{margin-bottom:18px}
+button,.btn{
+  border:0;background:#fff;color:var(--text);padding:11px 14px;border-radius:999px;font-weight:900;
+  cursor:pointer;box-shadow:0 3px 12px rgba(15,23,42,.06);text-decoration:none;display:inline-flex;
+  align-items:center;justify-content:center;gap:6px
+}
+button.primary,.tab.active{background:var(--green);color:#fff}
+button.dark,.btn.dark{background:var(--dark);color:#fff}
+button.ok{background:var(--green2);color:var(--green)}
+button.warn{background:#fff7ed;color:#9a3412}
+button.danger{background:#fee2e2;color:#991b1b}
+.panel{display:none}.panel.active{display:block}
+.login{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;
+  background:linear-gradient(135deg,#f7fbff,#eef7f2)
+}
+.loginBox{max-width:520px;width:100%;text-align:center}
+.loginLogo{
+  width:180px;height:180px;object-fit:cover;border-radius:28px;margin:0 auto 14px;display:block;
+  background:#fff;box-shadow:var(--shadow)
+}
+.loginBox h1{font-size:30px;letter-spacing:-.05em}.loginBox .grid button{font-size:14px;text-transform:uppercase;letter-spacing:.03em}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:14px}
+.span3{grid-column:span 3}.span4{grid-column:span 4}.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}
+label{display:block;font-size:12px;font-weight:900;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+input,select,textarea{
+  width:100%;border:1px solid var(--line);background:#fbfdff;border-radius:14px;
+  padding:12px;font-size:14px;outline:none
+}
+textarea{min-height:78px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(11,143,106,.12)}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.kpi span{display:block;color:var(--muted);font-weight:800;text-transform:uppercase;font-size:11px}
+.kpi b{display:block;font-size:27px;margin-top:8px}
+.notice{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:16px;padding:12px;font-size:13px;line-height:1.45;margin-top:12px}
+.stop{
+  display:grid;grid-template-columns:40px 86px 1fr auto;gap:8px;align-items:start;margin:10px 0;
+  padding:10px;border:1px solid var(--line);border-radius:18px;background:#fbfdff
+}
+.num{width:34px;height:34px;border-radius:12px;background:var(--green2);display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:900}
+.stopActions{display:flex;gap:6px;flex-wrap:wrap;max-width:560px}
+.mapLink{margin-top:6px;font-size:13px}.mapLink a{font-weight:800;color:var(--blue);text-decoration:none}
+.routebar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:end}
+.mapBox{
+  border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#f8fafc;min-height:250px;
+  display:flex;align-items:center;justify-content:center;color:var(--muted);text-align:center;padding:18px
+}
+.mapBox iframe{display:block;width:100%;height:300px;border:0}
+.expense{
+  display:grid;grid-template-columns:150px 1fr 150px 1fr 110px 90px;gap:9px;align-items:end;
+  padding:10px;border:1px dashed var(--line);border-radius:18px;background:#fbfdff;margin:8px 0
+}
+.tablewrap{overflow:auto}
+table{width:100%;border-collapse:separate;border-spacing:0 8px;min-width:850px}
+th{font-size:11px;color:var(--muted);text-align:left;text-transform:uppercase;padding:0 10px}
+td{background:#fbfdff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:9px 10px;font-size:13px}
+td:first-child{border-left:1px solid var(--line);border-radius:14px 0 0 14px}
+td:last-child{border-right:1px solid var(--line);border-radius:0 14px 14px 0}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:14px}
+.modal.show{display:flex}.modalBox{background:#fff;border-radius:22px;padding:18px;max-width:560px;width:100%;box-shadow:0 24px 70px rgba(0,0,0,.25)}
+.hide{display:none!important}.clickRow{cursor:pointer}.clickRow:hover{background:#f8fafc}
+.status{font-weight:900;border-radius:99px;padding:6px 10px;display:inline-block}
+.pendente{background:#fef3c7;color:#92400e}.aprovado{background:#dcfce7;color:#166534}.rejeitado{background:#fee2e2;color:#991b1b}
+@media(max-width:900px){
+  .app{padding:12px}.top{position:relative;align-items:flex-start;flex-direction:column;padding:12px 0}
+  .tabs{width:100%;overflow:auto;flex-wrap:nowrap;padding-bottom:4px}.tabs button,.topActions button,.topActions a{flex:1}
+  .grid,.routebar{display:block}.span3,.span4,.span6,.span8,.span12{grid-column:span 12}
+  .card{padding:14px}.kpi{padding:14px;margin:8px 0}h1{font-size:19px}.kpi b{font-size:22px}
+  .stop{grid-template-columns:34px 76px 1fr}.stopActions{grid-column:1/4;display:grid;grid-template-columns:1fr 1fr;max-width:100%}
+  .expense{grid-template-columns:1fr}.mapBox iframe{height:320px}
+}
+@media(max-width:520px){
+  .top{position:relative}.tabs button{font-size:12px;padding:10px}.grid{grid-template-columns:1fr}
+  .loginLogo{width:150px;height:150px}.mapBox iframe{height:280px}
+}
+/* MOBILE PONTUAL — organização extra para telas pequenas (sem alterar layout desktop) */
+@media(max-width:780px){
+  .routebar{gap:8px}
+  .stop input,.stop select{font-size:14px;min-height:42px}
+  .stop .stopActions button{font-size:12px;padding:10px 8px;min-height:40px}
+  .card h2,.card h3{font-size:16px}
+  table{font-size:12px}
+  th,td{padding:8px 6px}
+  .kpi b{font-size:20px}
+  .modalBox{max-width:96vw;padding:14px;border-radius:18px}
+  .topActions{flex-wrap:wrap;gap:6px}
+  button,.btn{min-height:44px}
+  input,select,textarea{min-height:42px;font-size:14px}
+}
+@media(max-width:420px){
+  .app{padding:8px}
+  .stop{grid-template-columns:30px 64px 1fr}
+  h1{font-size:17px}
+  .tabs button{font-size:11px;padding:8px 6px}
+  .mapBox iframe{height:240px}
+}
+
+/* AJUSTE PONTUAL: botão de prévia mais forte */
+.route-preview-btn{
+  background:linear-gradient(135deg,#0b8f6a,#08785a)!important;
+  color:#fff!important;
+  min-height:44px;
+  border-radius:16px!important;
+  box-shadow:0 10px 24px rgba(11,143,106,.22)!important;
+  letter-spacing:.01em;
+}
+.route-preview-btn:hover{filter:brightness(.96);transform:translateY(-1px)}
+.fav-remove{background:#fee2e2!important;color:#991b1b!important;min-width:42px}
+
+.fav-btn{font-size:11px!important;padding:10px 12px!important;min-width:74px}
+.search-ok{color:var(--green);font-weight:800}
+
+
+/* BOTÕES DE PERMISSÃO SUPERVISOR */
+.access-toggle{border:0;border-radius:999px;padding:11px 14px;font-weight:900;cursor:pointer;box-shadow:0 3px 12px rgba(15,23,42,.06);background:#eef2f7;color:#334155}
+.access-toggle.ped{background:#fff7ed;color:#9a3412}
+.access-toggle.est{background:#ecfdf5;color:#047857}
+.access-toggle.on{background:var(--green);color:#fff}
+.access-toggle.ped.on{background:#f59e0b;color:#fff}
+.access-toggle.est.on{background:#059669;color:#fff}
+
+/* STATUS DO DIA */
+.day-type-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.day-type-btn{border:0;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer;background:#fff;box-shadow:0 3px 12px rgba(15,23,42,.06);color:#142033}
+.day-type-btn.active{background:#0b8f6a;color:#fff}
+.day-type-btn.folga{background:#e0f2fe;color:#075985}.day-type-btn.feriado{background:#fef3c7;color:#92400e}.day-type-btn.ferias{background:#fce7f3;color:#9d174d}.day-type-btn.active.folga,.day-type-btn.active.feriado,.day-type-btn.active.ferias{background:#0b8f6a;color:#fff}
+.is-admin .hideForAdmin{display:none!important}
+</style>
+</head>
+<body>
+<div id="loginScreen" class="login">
+  <div class="loginBox card">
+    <img class="loginLogo" id="loginLogo" alt="Climbers logo">
+    <h1>Sistema de Reembolso</h1>
+    <div class="grid" style="margin-top:18px;text-align:left">
+      <div class="span12">
+        <label>Selecione o usuário</label>
+        <select id="loginSupervisor"></select>
+      </div>
+      <div class="span12">
+        <button class="primary" style="width:100%;background:#16a34a;color:#fff" onclick="loginSupervisorOnly()">ENTRAR</button>
+      </div>
+      <div class="span12">
+        <button class="dark" style="width:100%" onclick="showAdminAccess()">ADM</button>
+      </div>
+      <div id="adminAccessBox" class="span12 hide">
+        <label>Senha ADM</label>
+        <input id="loginPass" type="password" placeholder="Digite a senha ADM">
+        <button class="dark" style="width:100%;margin-top:10px" onclick="doLogin()">ENTRAR</button>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div id="app" class="app hide">
+<header class="top">
+  <div class="brand">
+    <img class="logo" id="topLogo" alt="Climbers logo">
+    <div><h1>Sistema de Reembolso</h1><div class="sub">Rotas, KM, custos extras e aprovação.</div></div>
+  </div>
+  <div class="topActions">
+    <button onclick="setLang('pt')">PT</button>
+    <button onclick="setLang('zh')">中文</button>
+    <button onclick="logout()">Sair</button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" onclick="showTab('launch',this)">Lançamento</button>
+  <button class="tab gerencialOnly" onclick="showTab('admin',this)">Gestão</button>
+  <button class="tab" onclick="showTab('reports',this)">Relatório</button>
+</nav>
+
+<section id="launch" class="panel active">
+  <div id="adminLaunchSummary" class="card gerencialOnly hide">
+    <h2>Apurado geral de lançamentos</h2>
+    <div class="sub">Visão ADM com todos os supervisores acumulados por quinzena atual e últimos 30 dias.</div>
+    <div class="grid" style="margin-top:12px">
+      <div class="span3"><label>Período dentro do mês</label><select id="admPeriodoFiltro" onchange="renderAdminLaunchSummary()"><option value="auto">Período atual</option><option value="01-15">01 a 15</option><option value="16-fim">16 ao fim do mês</option></select></div>
+    </div>
+    <div class="grid">
+      <div class="span3 kpi"><span>Período atual</span><b id="admPeriodoAtual">-</b></div>
+      <div class="span3 kpi"><span>KM quinzena</span><b id="admKmQuinzena">0 km</b></div>
+      <div class="span3 kpi"><span>Total quinzena</span><b id="admTotalQuinzena">R$ 0,00</b></div>
+      <div class="span3 kpi"><span>Últimos 30 dias</span><b id="admTotal30">R$ 0,00</b></div>
+    </div>
+    <div class="tablewrap"><table id="admLaunchTable"></table></div>
+  </div>
+  <div class="card">
+    <h2>DADOS INICIAIS</h2>
+    <div class="sub">Preencha as paradas e visualize a rota antes de salvar.</div>
+    <div class="grid" style="margin-top:14px">
+      <div class="span3"><label>Supervisor</label><select id="sup" onchange="renderSupervisorRoutePanel();renderReports()"></select></div>
+      <div class="span3"><label>Região</label><input id="region" placeholder="Ex: BH Norte"></div>
+      <div class="span3"><label>Lojas/filiais visitadas no dia</label><input id="branch" placeholder="Ex: 1159 / Magalu Centro"></div>
+      <div class="span3"><label>Cidade</label><input id="city" placeholder="Ex: BH, Contagem"></div>
+      <div class="span3"><label>Período</label><select id="periodSelect" onchange="updatePeriodDates()"><option value="01-15">01 a 15</option><option value="16-fim">16 ao fim do mês</option></select><input id="date" type="hidden"></div>
+      <div class="span3"><label>Data dia</label><select id="daySelect" onchange="updateSelectedDayDate()"></select></div>
+      <div class="span3"><label>Data de entrada</label><input id="periodStart" readonly></div>
+      <div class="span3"><label>Data de saída</label><input id="periodEnd" readonly></div>
+      <div class="span3"><label>Valor por KM</label><input id="kmValue" type="number" step="0.01" value="1"></div>
+      <div class="span6"><label>Observação</label><input id="obs" placeholder="Observação rápida"></div>
+    </div>
+  </div>
+
+  <div class="card gerencialOnly hide" id="supervisorRoutesCard">
+    <h2>Dados lançados do supervisor selecionado</h2>
+    <div class="sub">Ao selecionar o supervisor, aparecem abaixo os lançamentos já enviados por ele.</div>
+    <div class="tablewrap"><table id="supervisorRoutesTable"></table></div>
+  </div>
+
+  <div class="card hideForAdmin">
+    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+      <div><h2>ROTAS</h2><div class="sub">Digite o endereço: o link do Maps aparece embaixo e a prévia atualiza.</div></div>
+      <button class="primary" onclick="addStop()">+ Adicionar parada</button>
+    </div>
+    <div class="day-type-wrap" id="dayTypeWrap">
+      <button type="button" class="day-type-btn active" data-type="TRABALHO" onclick="setDayType('TRABALHO')">Dia com rota</button>
+      <button type="button" class="day-type-btn folga" data-type="FOLGA" onclick="setDayType('FOLGA')">+ Folga</button>
+      <button type="button" class="day-type-btn feriado" data-type="FERIADO" onclick="setDayType('FERIADO')">+ Feriado</button>
+      <button type="button" class="day-type-btn ferias" data-type="FÉRIAS" onclick="setDayType('FÉRIAS')">+ Férias</button>
+    </div>
+    <div class="mini" id="dayTypeNote" style="margin-top:8px"></div>
+    <div id="stops"></div>
+  </div>
+
+  <div class="card hideForAdmin">
+    <div class="routebar">
+      <div><label>KM da rota</label><input id="kmManual" type="text" inputmode="decimal" placeholder="Automático / manual" oninput="kmManualEditado=true;calcAll();saveDraft()"><div class="mini" id="routeStatus"></div></div>
+      <div><label>Prévia / ação</label><button class="primary route-preview-btn" style="width:100%" onclick="previewRoute(true)">Atualizar rota e KM</button></div>
+      <div><label>Rota selecionada</label><button class="dark" style="width:100%" onclick="openFullRoute()">Abrir toda a rota adicionada</button><div class="mini" style="margin-top:6px">Maps pode indicar o KM +- conforme mudanças na rota (ex: trânsito)</div></div>
+    </div>
+    <div class="mapBox" id="mapBox" style="margin-top:14px">
+      <iframe id="mapFrame" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <div class="card hideForAdmin">
+    <h2>Custos extras</h2>
+    <div class="sub">Supervisores lançam Campanhas e Outros. Pedágio e Estacionamento aparecem somente para cargos autorizados.</div>
+    <div class="row" id="expenseButtons" style="margin:12px 0">
+      <button class="warn privileged-cost" onclick="addExpense('Pedágio')">+ Pedágio</button>
+      <button class="ok privileged-cost" onclick="addExpense('Estacionamento')">+ Estacionamento</button>
+      <button class="ok" onclick="addExpense('Campanha')">+ Campanha</button>
+      <button onclick="addExpense('Outros')">+ Outros</button>
+    </div>
+    <div id="expenses"></div>
+  </div>
+
+  <div class="card hideForAdmin">
+    <h2>Custos totais</h2>
+    <div class="grid">
+      <div class="span3 kpi"><span>KM x Valor</span><b id="kmMoney">R$ 0,00</b></div>
+      <div class="span3 kpi"><span>Pedágio</span><b id="pedTotal">R$ 0,00</b></div>
+      <div class="span3 kpi"><span>Estacionamento</span><b id="estTotal">R$ 0,00</b></div>
+      <div class="span3 kpi"><span>Total geral</span><b id="grandTotal">R$ 0,00</b></div>
+    </div>
+    <button class="primary" style="width:100%;margin-top:12px" onclick="saveLaunch()">Salvar lançamento</button>
+  </div>
+</section>
+
+<section id="reports" class="panel">
+  <div class="card">
+    <h2>Relatório</h2>
+    <div class="sub" id="reportInfoText"></div>
+    <div class="grid" style="margin-top:12px">
+      <div class="span3"><label>Mês</label><select id="reportMonth" onchange="renderReports()"></select></div>
+      <div class="span3"><label>Ano</label><select id="reportYear" onchange="renderReports()"></select></div>
+      <div class="span6 kpi" id="reportEquipeBox"><span>Relatórios da equipe por mês/ano</span><b id="reportResumoEquipe">R$ 0,00</b></div>
+    </div>
+    <div class="tablewrap"><table id="reportTable"></table></div>
+  </div>
+</section>
+
+<section id="admin" class="panel">
+  <div class="card">
+    <h2>Gestão Geral</h2>
+    <div class="grid">
+      <div class="span3 kpi"><span>KM total</span><b id="aKm">0 km</b></div>
+      <div class="span3 kpi"><span>Pedágio</span><b id="aPed">R$ 0,00</b></div>
+      <div class="span3 kpi"><span>Estacionamento</span><b id="aEst">R$ 0,00</b></div>
+      <div class="span3 kpi"><span>Total geral</span><b id="aTotal">R$ 0,00</b></div>
+    </div>
+    <div class="grid">
+      <div class="span3 kpi"><span>Total operação</span><b id="aOpTotal">R$ 0,00</b></div>
+      <div class="span3 kpi"><span>Custo médio / KM</span><b id="aAvg">R$ 0,00</b></div>
+      <div class="span3 kpi"><span>Rotas</span><b id="aRoutes">0</b></div>
+      <div class="span3 kpi"><span>Supervisores ativos</span><b id="gSupAtivos">0</b></div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="span6 card">
+      <h2>Supervisores</h2>
+      <div class="row"><input id="newSup" placeholder="Nome do supervisor"><button class="primary" onclick="addSupervisor()">Adicionar</button></div>
+      <div id="supList"></div>
+    </div>
+    <div class="span6 card">
+      <h2>Configurações</h2>
+      <label>Editar senha ADM</label><input id="adminPass" type="password">
+      <button onclick="saveAdminPass()" style="margin-top:8px">Salvar senha</button>
+    </div>
+    <div class="span12 card">
+      <h2>Supervisores — clique para detalhar</h2>
+      <div class="tablewrap"><table id="supervisorDashboard"></table></div>
+    </div>
+    <div class="span12 card gerencialOnly">
+      <h2>Custos extras por supervisor (período atual)</h2>
+      <div class="sub">Todos os comprovantes de Pedágio, Estacionamento, Campanhas e Outros lançados no período.</div>
+      <div class="tablewrap"><table id="custosExtrasAdmTable"></table></div>
+    </div>
+    <div class="span12 card gerencialOnly">
+      <h2>Histórico de alterações</h2>
+      <div class="sub">Registro automático de mudanças feitas em supervisores, permissões e configurações.</div>
+      <div class="tablewrap"><table id="changeHistoryTable"></table></div>
+    </div>
+    <div class="span12 card">
+      <h2>Histórico de rotas por supervisor</h2>
+      <div class="sub">Registro salvo automaticamente em cada lançamento, com rota, KM e link do Google Maps.</div>
+      <div class="tablewrap"><table id="routeHistoryTable"></table></div>
+    </div>
+  </div>
+</section>
+
+<section id="director" class="panel">
+  <div class="card">
+    <h2>Painel Diretoria</h2>
+    <div class="grid">
+      <div class="span3 kpi"><span>Total operação</span><b id="dTotal">R$ 0,00</b></div>
+      <div class="span3 kpi"><span>KM total</span><b id="dKm">0 km</b></div>
+      <div class="span3 kpi"><span>Custo médio / KM</span><b id="dAvg">R$ 0,00</b></div>
+      <div class="span3 kpi"><span>Rotas</span><b id="dRoutes">0</b></div>
+    </div>
+    <button onclick="exportCSV()">Exportar resumo</button>
+  </div>
+  <div class="card"><h2>Ranking por Supervisor</h2><div class="tablewrap"><table id="directorTable"></table></div></div>
+</section>
+
+<section id="regional" class="panel">
+  <div class="card">
+    <h2>Painel Regional</h2>
+    <div class="grid">
+      <div class="span4"><label>Filtrar região</label><input id="filterRegion" oninput="renderAll()" placeholder="Digite região"></div>
+      <div class="span4"><label>Data início</label><input id="filterStart" type="date" onchange="renderAll()"></div>
+      <div class="span4"><label>Data fim</label><input id="filterEnd" type="date" onchange="renderAll()"></div>
+    </div>
+  </div>
+  <div class="card"><h2>Comparativo Regional</h2><div class="tablewrap"><table id="regionalTable"></table></div></div>
+</section>
+</div>
+
+<div class="modal" id="favModal">
+  <div class="modalBox">
+    <h2>Favoritos</h2>
+    <p class="sub">Escolha, salve ou renomeie um endereço favorito.</p>
+    <label>Nome do favorito</label><input id="favName" placeholder="Ex: Casa" oninput="autoFillFavoriteByName()">
+    <label style="margin-top:10px">Endereço</label><input id="favAddress">
+    <div class="row" style="margin-top:10px"><button class="primary" onclick="saveFavorite()">Salvar favorito</button><button onclick="closeFav()">Fechar</button></div>
+    <div id="favList" style="margin-top:12px"></div>
+  </div>
+</div>
+
+<div class="modal" id="expenseModal">
+  <div class="modalBox">
+    <h2 id="expenseModalTitle">Adicionar custo</h2>
+    <p class="sub">Preencha as informações e salve para lançar no relatório.</p>
+    <label>Tipo</label><select id="expenseType"></select>
+    <label style="margin-top:10px">Data do comprovante</label><input id="expenseDate" type="date">
+    <label style="margin-top:10px">Gasto</label><input id="expenseGasto" placeholder="Ex: ação, campanha, estacionamento">
+    <label style="margin-top:10px">Valor</label><input id="expenseValue" type="number" step="0.01" placeholder="0,00">
+    <label style="margin-top:10px">Comprovante</label>
+    <div class="row" style="gap:8px"><input id="expenseFile" type="file" accept="image/*,.pdf" style="flex:1"><button type="button" class="dark" onclick="abrirCameraComprovante()">📷 Abrir câmera</button></div>
+    <input id="expenseCameraInput" type="file" accept="image/*" capture="environment" class="hide">
+    <label style="margin-top:10px">Observação</label><input id="expenseNote" placeholder="Detalhe o gasto">
+    <div id="expenseSavedMsg" class="hide" style="margin-top:10px;background:#e8fff7;color:#0b8f6a;border-radius:12px;padding:10px;font-weight:900;text-align:center">✓ Comprovante salvo com sucesso</div>
+    <div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap">
+      <button class="primary" onclick="saveExpenseModal(false)">Salvar</button>
+      <button class="ok" onclick="saveExpenseModal(true)">Salvar e próximo</button>
+      <button onclick="closeExpenseModal()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="detailModal">
+  <div class="modalBox" style="max-width:900px">
+    <h2 id="detailTitle">Detalhes</h2>
+    <div class="tablewrap"><table id="detailTable"></table></div>
+    <button style="margin-top:12px" onclick="detailModal.classList.remove('show')">Fechar</button>
+  </div>
+</div>
+
+<div class="modal" id="editLaunchModal">
+  <div class="modalBox" style="max-width:560px">
+    <h2>Editar Lançamento</h2>
+    <p class="sub">Altere os campos desejados e salve.</p>
+    <div class="grid" style="margin-top:10px">
+      <div class="span6"><label>Supervisor</label><input id="editSup" readonly style="background:#f4f7fb"></div>
+      <div class="span6"><label>Região</label><input id="editRegion" placeholder="Região"></div>
+      <div class="span6"><label>Lojas/Filiais</label><input id="editBranch" placeholder="Lojas visitadas"></div>
+      <div class="span6"><label>Cidade</label><input id="editCity" placeholder="Cidade"></div>
+      <div class="span6"><label>KM</label><input id="editKm" type="number" step="0.1" placeholder="0.0"></div>
+      <div class="span6"><label>Observação</label><input id="editObs" placeholder="Observação"></div>
+      <div class="span6"><label>Status</label><select id="editStatus"><option>Pendente</option><option>Aprovado</option><option>Rejeitado</option></select></div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="primary" onclick="saveEditLaunch()">Salvar</button>
+      <button class="danger" onclick="deleteEditLaunch()">Excluir lançamento</button>
+      <button onclick="editLaunchModal.classList.remove('show')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="successModal">
+  <div class="modalBox" style="max-width:420px;text-align:center">
+    <div style="width:62px;height:62px;border-radius:999px;background:#e8fff7;color:#0b8f6a;display:grid;place-items:center;font-size:32px;font-weight:900;margin:0 auto 12px">✓</div>
+    <h2>Salvo com sucesso</h2>
+    <button class="primary" style="margin-top:12px;width:100%" onclick="successModal.classList.remove('show')">OK</button>
+  </div>
+</div>
+
+<script>
+const LOGO='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA3ADcAAD/2wBDAAIBAQEBAQIBAQECAgICAgQDAgICAgUEBAMEBgUGBgYFBgYGBwkIBgcJBwYGCAsICQoKCgoKBggLDAsKDAkKCgr/2wBDAQICAgICAgUDAwUKBwYHCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgr/wAARCAJAAkMDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9+KKKK0MwooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKK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AFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB/9k=';
+loginLogo.src=LOGO;topLogo.src=LOGO;
+
+const LS='km_reembolso_regional_v1';
+/* === FIREBASE FIXO (Realtime Database) — embutido e blindado === */
+const FIREBASE_CFG_FIXO=JSON.stringify({
+  apiKey:"AIzaSyA8LAQzJBOFdFAJq579OKFr7-dzpmZEg6w",
+  authDomain:"sistemasecundario-876e6.firebaseapp.com",
+  databaseURL:"https://sistemasecundario-876e6-default-rtdb.firebaseio.com",
+  projectId:"sistemasecundario-876e6",
+  storageBucket:"sistemasecundario-876e6.firebasestorage.app",
+  messagingSenderId:"552919191547",
+  appId:"1:552919191547:web:e7a18495b7aaaae56b855e",
+  measurementId:"G-SPD09M38K3"
+});
+let state={settings:{pass:'1234',firebaseCfg:FIREBASE_CFG_FIXO,googleApiKey:'',orsApiKey:'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImQwNjAwZTcyMDU3MDQ1NzBiZWFlNjg2ZDkwODc4Mjk3IiwiaCI6Im11cm11cjY0In0='},supervisors:['Supervisor 1'],supervisorProfiles:{},launches:[],favorites:[{name:'Casa',address:'RUA DONA MARIA JOSE LARA, 526'},{name:'Escritório',address:'AV BRASIL 709'}],currentUser:null};
+let stops=[{name:''},{name:''}],expenses=[],favIndex=0,db=null,dbmod=null,cloudReady=false;
+let googleMap=null,googleDirectionsService=null,googleDirectionsRenderer=null,googleAutocompleteReady=false,routeCalcTimer=null,kmManualEditado=false;
+const BRL=n=>(Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const enc=encodeURIComponent;
+function persist(){localStorage.setItem(LS,JSON.stringify(state));cloudSave()}
+function load(){try{state=JSON.parse(localStorage.getItem(LS))||state}catch(e){} state.settings=state.settings||{}; state.supervisorProfiles=state.supervisorProfiles||{}; date.value=new Date().toISOString().slice(0,10); if(typeof updatePeriodDates==='function')setTimeout(updatePeriodDates,0); adminPass.value=state.settings.pass||'1234'; if(typeof firebaseCfg!=='undefined')firebaseCfg.value=state.settings.firebaseCfg||''; if(typeof googleApiKey!=='undefined')googleApiKey.value=state.settings.googleApiKey||''; if(typeof orsApiKey!=='undefined')orsApiKey.value=state.settings.orsApiKey||''; renderSupervisors(); renderStops(); renderExpenses(); renderAll(); tryFirebase();}
+function showAdminAccess(){adminAccessBox.classList.remove('hide');loginPass.focus()}
+function doLogin(){let role='gerencial';if((loginPass.value||'')!==state.settings.pass){alert('Senha incorreta.');return}state.currentUser={role,supervisor:loginSupervisor.value||state.supervisors[0],name:loginSupervisor.value||'ADM'};loginScreen.classList.add('hide');app.classList.remove('hide');sup.value=state.currentUser.supervisor;document.querySelectorAll('.gerencialOnly').forEach(e=>e.classList.remove('hide'));document.body.classList.add('is-admin');renderAll();}
+function loginSupervisorOnly(){let nome=loginSupervisor.value||state.supervisors[0];if(!nome){alert('Cadastre um supervisor no ADM antes de entrar.');return}state.currentUser={role:'supervisor',supervisor:nome,name:nome};loginScreen.classList.add('hide');app.classList.remove('hide');document.querySelectorAll('.gerencialOnly').forEach(e=>e.classList.add('hide'));document.body.classList.remove('is-admin');sup.value=nome;renderAll();}
+function logout(){state.currentUser=null;document.body.classList.remove('is-admin');app.classList.add('hide');loginScreen.classList.remove('hide');}
+function showTab(id,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');renderAll()}
+
+const I18N_ZH={
+'Sistema de Reembolso':'报销系统','Selecione o usuário':'选择用户','ENTRAR':'登录','ADM':'管理员','Senha ADM':'管理员密码','Digite a senha ADM':'输入管理员密码',
+'Lançamento':'录入','Gestão':'管理','Relatório':'报表','Sair':'退出','PT':'PT','中文':'中文',
+'Apurado geral de lançamentos':'录入汇总','Período dentro do mês':'本月期间','Período atual':'当前期间','01 a 15':'01至15','16 ao fim do mês':'16至月底',
+'Período atual':'当前期间','KM quinzena':'半月公里','Total quinzena':'半月合计','Últimos 30 dias':'最近30天',
+'DADOS INICIAIS':'基本信息','Supervisor':'主管','Região':'区域','Lojas/filiais visitadas no dia':'当日门店','Cidade':'城市','Período':'期间','Data dia':'日期','Data de entrada':'开始日','Data de saída':'结束日','Valor por KM':'每公里费用','Observação':'备注','Observação rápida':'快速备注',
+'ROTAS':'路线','Digite o endereço: o link do Maps aparece embaixo e a prévia atualiza.':'输入地址:下方将显示地图链接并预览更新。','+ Adicionar parada':'+ 添加站点',
+'Dia com rota':'有路线','+ Folga':'+ 休息','+ Feriado':'+ 节假日','+ Férias':'+ 休假',
+'KM da rota':'路线公里','Automático / manual':'自动/手动','Prévia / ação':'预览/操作','Atualizar rota e KM':'更新路线和公里','Rota selecionada':'选中路线','Abrir toda a rota adicionada':'打开整条路线',
+'Custos extras':'额外费用','Custos totais':'总费用','KM x Valor':'公里×单价','Pedágio':'过路费','Estacionamento':'停车费','Total geral':'总计','Salvar lançamento':'保存录入',
+'+ Pedágio':'+ 过路费','+ Estacionamento':'+ 停车费','+ Campanha':'+ 活动','+ Outros':'+ 其他',
+'Mês':'月','Ano':'年','Supervisores':'主管列表','Configurações':'设置','Editar senha ADM':'修改管理员密码','Salvar senha':'保存密码','Adicionar':'添加','Salvar':'保存','Cargo':'职位','Permissões':'权限',
+'Histórico de alterações':'修改历史','Custos extras por supervisor (período atual)':'各主管额外费用(当前期间)','Histórico de rotas por supervisor':'各主管路线历史','Gestão Geral':'总体管理','KM total':'总公里','Rotas':'路线数','Supervisores ativos':'活跃主管','Total operação':'运营总额','Custo médio / KM':'每公里平均成本',
+'Buscar':'搜索','Usar na rota':'用于路线','Favoritos':'收藏','Fechar':'关闭'
+};
+const I18N_PT={};
+let CURRENT_LANG='pt';
+function _walkText(node,dict){
+  if(node.nodeType===3){const t=node.nodeValue.trim();if(t&&dict[t])node.nodeValue=node.nodeValue.replace(t,dict[t]);return;}
+  if(node.nodeType!==1)return;
+  if(['SCRIPT','STYLE'].includes(node.tagName))return;
+  if(node.tagName==='INPUT'||node.tagName==='TEXTAREA'){const ph=node.getAttribute('placeholder');if(ph&&dict[ph])node.setAttribute('placeholder',dict[ph]);return;}
+  node.childNodes.forEach(c=>_walkText(c,dict));
+}
+function _snapshotPT(){if(Object.keys(I18N_PT).length)return;Object.entries(I18N_ZH).forEach(([pt,zh])=>{I18N_PT[zh]=pt;});}
+function setLang(l){_snapshotPT();const dict = l==='zh'?I18N_ZH:(CURRENT_LANG==='zh'?I18N_PT:{}); _walkText(document.body,dict); CURRENT_LANG=l;}
+
+function renderSupervisors(){
+  state.supervisorProfiles=state.supervisorProfiles||{};
+  [sup,loginSupervisor].forEach(sel=>{
+    if(!sel)return;
+    let v=sel.value;
+    sel.innerHTML=state.supervisors.map(s=>`<option>${s}</option>`).join('');
+    if(v&&state.supervisors.includes(v))sel.value=v;
+  });
+  if(!supList)return;
+  supList.innerHTML=state.supervisors.map((s,i)=>{
+    const p=state.supervisorProfiles[s]||{cargo:'Supervisor',pedagio:false,estacionamento:false};
+    const nomeSeguro=s.replaceAll("'","\'");
+    return `<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:12px;gap:10px;align-items:end;flex-wrap:wrap">
+      <div style="min-width:170px"><label>Supervisor</label><b>${s}</b></div>
+      <div style="min-width:180px"><label>Cargo</label><select onchange="updateSupervisorProfile('${nomeSeguro}', 'cargo', this.value)">
+        ${['Supervisor','Gerente Regional','Coordenador','Administração'].map(c=>`<option ${p.cargo===c?'selected':''}>${c}</option>`).join('')}
+      </select></div>
+      <div style="min-width:170px"><label>Permissões</label>
+        <button class="access-toggle ped ${p.pedagio?'on':''}" onclick="toggleSupervisorAccess('${nomeSeguro}','pedagio')">+ Pedágio</button>
+      </div>
+      <div style="min-width:210px"><label>&nbsp;</label>
+        <button class="access-toggle est ${p.estacionamento?'on':''}" onclick="toggleSupervisorAccess('${nomeSeguro}','estacionamento')">+ Estacionamento</button>
+      </div>
+      <button class="ok" onclick="salvarSupervisor('${nomeSeguro}')">Salvar</button><button class="danger" onclick="removeSupervisor(${i})">×</button>
+    </div>`;
+  }).join('');
+}
+function addSupervisor(){let n=newSup.value.trim();if(!n)return;if(!state.supervisors.includes(n))state.supervisors.push(n);state.supervisorProfiles=state.supervisorProfiles||{};state.supervisorProfiles[n]=state.supervisorProfiles[n]||{cargo:'Supervisor',pedagio:false,estacionamento:false};newSup.value='';persist();renderSupervisors();renderAll();logChange('Supervisor adicionado: '+n);}
+function removeSupervisor(i){if(!confirm('Remover supervisor?'))return;let nome=state.supervisors[i];state.supervisors.splice(i,1);if(state.supervisorProfiles)delete state.supervisorProfiles[nome];persist();renderSupervisors();renderAll();logChange('Supervisor removido: '+nome);}
+function updateSupervisorProfile(nome,campo,valor){state.supervisorProfiles=state.supervisorProfiles||{};state.supervisorProfiles[nome]=state.supervisorProfiles[nome]||{cargo:'Supervisor',pedagio:false,estacionamento:false};state.supervisorProfiles[nome][campo]=valor;persist();refreshAccessUI();renderSupervisors();logChange('Alterado '+campo+' de '+nome+' → '+valor);}
+function toggleSupervisorAccess(nome,campo){
+  state.supervisorProfiles=state.supervisorProfiles||{};
+  state.supervisorProfiles[nome]=state.supervisorProfiles[nome]||{cargo:'Supervisor',pedagio:false,estacionamento:false};
+  state.supervisorProfiles[nome][campo]=!state.supervisorProfiles[nome][campo];
+  persist();
+  refreshAccessUI();
+  renderSupervisors();
+}
+
+
+function logChange(msg){state.changes=state.changes||[];state.changes.unshift({when:new Date().toISOString(),user:(state.currentUser?.role==='gerencial'?'ADM':(state.currentUser?.supervisor||'-')),msg:msg});if(state.changes.length>200)state.changes.length=200;persist();renderChangeHistory();}
+function salvarSupervisor(nome){const p=getSupervisorProfile(nome);logChange('Supervisor "'+nome+'" salvo — Cargo: '+(p.cargo||'-')+', Pedágio: '+(p.pedagio?'sim':'não')+', Estac.: '+(p.estacionamento?'sim':'não'));persist();alert('Alterações de '+nome+' salvas.');}
+function renderChangeHistory(){const t=document.getElementById('changeHistoryTable');if(!t)return;const list=state.changes||[];t.innerHTML='<tr><th>Quando</th><th>Usuário</th><th>Alteração</th></tr>'+(list.length?list.map(c=>`<tr><td>${new Date(c.when).toLocaleString('pt-BR')}</td><td>${c.user}</td><td>${c.msg}</td></tr>`).join(''):'<tr><td colspan=3 style="text-align:center;color:#687487">Nenhuma alteração registrada.</td></tr>');}
+function renderCustosExtrasSupervisor(){const t=document.getElementById('custosExtrasAdmTable');if(!t)return;const p=periodoSelecionado();const rows=(state.launches||[]).filter(r=>{let d=new Date((r.date||'')+'T00:00:00');return d.getFullYear()===p.ano&&d.getMonth()===p.mes&&d.getDate()>=p.ini&&d.getDate()<=p.fim});const map={};rows.forEach(r=>{(r.expenses||[]).forEach(e=>{const k=r.supervisor||'-';map[k]=map[k]||[];map[k].push({...e,date:r.date});});});const sups=Object.keys(map);t.innerHTML='<tr><th>Supervisor</th><th>Data</th><th>Tipo</th><th>Gasto</th><th>Valor</th><th>Comprovante</th><th>Obs</th></tr>'+(sups.length?sups.flatMap(s=>map[s].map((e,i)=>`<tr><td>${i===0?'<b>'+s+'</b>':''}</td><td>${(e.data||e.date||'').split('-').reverse().join('/')}</td><td>${e.type||''}</td><td>${e.gasto||''}</td><td>${(Number(e.value||0)).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</td><td>${e.fileName||'-'}</td><td>${e.note||''}</td></tr>`)).join(''):'<tr><td colspan=7 style="text-align:center;color:#687487">Sem custos extras no período.</td></tr>');}
+function getSupervisorProfile(nome){state.supervisorProfiles=state.supervisorProfiles||{};return state.supervisorProfiles[nome]||{cargo:'Supervisor',pedagio:false,estacionamento:false}}
+function validStops(){return stops.map(s=>(s.name||'').trim()).filter(Boolean)}
+function mapsUrl(){let a=validStops();if(a.length<2)return 'https://www.google.com/maps';let origin=enc(a[0]);let destination=enc(a[a.length-1]);let way=a.slice(1,-1).map(enc).join('|');return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}${way?'&waypoints='+way:''}&travelmode=driving`}
+function mapsEmbedUrl(){let a=validStops();if(!a.length)return 'https://www.google.com/maps?output=embed&q=Brasil';if(a.length===1)return 'https://www.google.com/maps?output=embed&q='+enc(a[0]);return 'https://maps.google.com/maps?saddr='+enc(a[0])+'&daddr='+a.slice(1).map(enc).join('+to:')+'&output=embed'}
+function searchUrl(v){return 'https://www.google.com/maps/search/?api=1&query='+enc(v||'')}
+function setRouteStatus(msg){let el=document.getElementById('routeStatus');if(el)el.textContent=msg||''}
+function loadGoogleMapsApi(){}
+function initGoogleRouteTools(){}
+function applyAutocompleteToStops(){}
+function scheduleRouteCalc(){clearTimeout(routeCalcTimer);routeCalcTimer=setTimeout(()=>previewRoute(false),450)}
+function getAddressSuggestions(){
+  const fromHistory=(state.launches||[]).flatMap(r=>r.route||[]).filter(v=>v&&!['FOLGA','FERIADO','FÉRIAS'].includes(v));
+  const fromFavs=(state.favorites||[]).map(f=>f.address).filter(Boolean);
+  const favNames=(state.favorites||[]).map(f=>f.name).filter(Boolean);
+  const all=[...favNames,...fromFavs,...fromHistory];
+  return [...new Set(all.map(v=>v.trim()).filter(Boolean))];
+}
+function buildAddressDatalist(){
+  let dl=document.getElementById('addressHistoryDL');
+  if(!dl){dl=document.createElement('datalist');dl.id='addressHistoryDL';document.body.appendChild(dl);}
+  const sugs=getAddressSuggestions();
+  dl.innerHTML=sugs.map(v=>`<option value="${v.replaceAll('"','&quot;')}">`).join('');
+}
+function renderStops(){
+  buildAddressDatalist();
+  let box=document.getElementById('stops');box.innerHTML='';
+  stops.forEach((s,i)=>{
+    let div=document.createElement('div');div.className='stop';
+    div.innerHTML=`<div class="num">${i+1}</div><select onchange="moveStop(${i},this.value)">${stops.map((_,j)=>`<option value="${j}" ${i==j?'selected':''}>${j+1}ª</option>`).join('')}</select><div><input class="route-address" data-index="${i}" list="addressHistoryDL" value="${(s.name||'').replaceAll('"','&quot;')}" onblur="handleStopBlur(${i},this)" oninput="stops[${i}].name=this.value;renderMapLink(${i});scheduleRouteCalc();saveDraft()" placeholder="${i===0?'Casa / origem':'Destino / próxima parada'}"><div class="mapLink" id="mapLink${i}"></div></div><div class="stopActions"><button class="btn" id="buscarStop${i}" onclick="buscarEndereco(${i})">Buscar</button><button onclick="useStop(${i})">Usar na rota</button><button class="warn fav-btn" onclick="openFav(${i})">Favoritos</button><button onclick="editStop(${i})">✏️</button><button class="danger" onclick="removeStop(${i})">×</button></div>`;
+    box.appendChild(div);renderMapLink(i);
+  });
+  previewRoute(false);
+}
+function renderMapLink(i){let el=document.getElementById('mapLink'+i);let v=(stops[i]?.name||'').trim();if(el)el.innerHTML=v?`<a target="_blank" href="${searchUrl(v)}">Buscar este endereço no Maps</a>`:''}
+async function buscarEndereco(i){
+  let input=document.querySelector(`.route-address[data-index="${i}"]`);
+  let valor=(input?.value||stops[i]?.name||'').trim();
+  if(!valor){alert('Digite um endereço para buscar.');return}
+  let btn=document.getElementById('buscarStop'+i);
+  if(btn)btn.textContent='Buscando...';
+  try{
+    const ref=i>0?await geocodeEnderecoGratis(stops[i-1]?.name||''):null;
+    const geo=await geocodeEnderecoGratis(valor,ref);
+    if(geo){
+      // não troca por descrição gigante: mantém o texto do usuário e só garante cidade/UF quando necessário
+      let pronto=normalizarConsultaEndereco(valor).toUpperCase();
+      if(!/MINAS GERAIS|BELO HORIZONTE|CONTAGEM|BETIM|SANTA LUZIA|MG/.test(pronto))pronto=pronto+', MG';
+      stops[i].name=pronto;
+      if(input)input.value=pronto;
+      renderMapLink(i);
+      await previewRoute(true);
+      saveDraft();
+    }else{
+      alert('Endereço não encontrado. Tente colocar cidade/estado.');
+    }
+  }catch(e){
+    alert('Não foi possível buscar agora. Confira a internet e tente novamente.');
+  }
+  if(btn)btn.textContent='Buscar';
+}
+function addStop(){stops.push({name:''});renderStops();scheduleRouteCalc();saveDraft()}
+function removeStop(i){if(stops.length<=2)return alert('Mantenha pelo menos origem e destino.');stops.splice(i,1);renderStops();scheduleRouteCalc();saveDraft()}
+function moveStop(i,j){j=Number(j);let x=stops.splice(i,1)[0];stops.splice(j,0,x);renderStops();scheduleRouteCalc();saveDraft()}
+function editStop(i){let n=prompt('Editar parada:',stops[i].name);if(n!==null){stops[i].name=n;renderStops();scheduleRouteCalc();saveDraft()}}
+function useStop(i){
+  let input=document.querySelector(`.route-address[data-index="${i}"]`);
+  if(input&&stops[i])stops[i].name=input.value.trim();
+  renderMapLink(i);
+  previewRoute(true);
+  saveDraft();
+}
+function autoCompleteEnderecoLivre(el){return Promise.resolve()}
+function handleStopBlur(i,el){autoFormatEndereco(el);if(stops[i])stops[i].name=el.value;renderMapLink(i);previewRoute(false);saveDraft()}
+function normalizarConsultaEndereco(address){
+  let v=(address||'').trim();
+  v=v.replace(/\bbh\b/ig,'Belo Horizonte');
+  v=v.replace(/\bmg\b/ig,'Minas Gerais');
+  v=v.replace(/\bav\.?\b/ig,'Avenida');
+  v=v.replace(/\br\.?\b/ig,'Rua');
+  v=v.replace(/\s*,\s*/g,', ');
+  v=v.replace(/\s+/g,' ');
+  return v;
+}
+const GEO_VIEWBOX_BH='-44.35,-19.55,-43.55,-20.25';
+const geoCache={};
+function contextoEnderecoBase(){
+  const partes=[];
+  const c=(typeof city!=='undefined'?city.value:'').trim();
+  const r=(typeof region!=='undefined'?region.value:'').trim();
+  if(c)partes.push(c);
+  if(r)partes.push(r);
+  partes.push('Belo Horizonte');
+  partes.push('Minas Gerais');
+  partes.push('Brasil');
+  return [...new Set(partes.filter(Boolean))].join(', ');
+}
+function limparEnderecoBusca(address){
+  let v=normalizarConsultaEndereco(address||'').trim();
+  v=v.replace(/\s+/g,' ');
+  // evita repetir cidade/estado demais e melhora busca local
+  v=v.replace(/,?\s*BRASIL$/i,'');
+  return v;
+}
+async function buscarGeocodes(query,limit=8,usarViewbox=true){
+  const key=(query+'|'+limit+'|'+usarViewbox).toLowerCase();
+  if(geoCache[key])return geoCache[key];
+  let url='https://nominatim.openstreetmap.org/search?format=json&limit='+limit+'&addressdetails=1&accept-language=pt-BR&countrycodes=br&q='+enc(query);
+  if(usarViewbox)url+='&viewbox='+GEO_VIEWBOX_BH+'&bounded=0';
+  const res=await fetch(url,{headers:{'Accept':'application/json'}});
+  const data=await res.json();
+  const out=(data||[]).map(x=>({lat:Number(x.lat),lon:Number(x.lon),label:(x.display_name||query).toUpperCase(),raw:x})).filter(x=>Number.isFinite(x.lat)&&Number.isFinite(x.lon));
+  geoCache[key]=out;
+  return out;
+}
+function scoreEndereco(c, referencia=null, ordem=0){
+  let score=0;
+  const label=c.label||'';
+  if(label.includes('MINAS GERAIS'))score-=80;
+  if(label.includes('BELO HORIZONTE'))score-=70;
+  if(label.includes('SANTA LUZIA'))score-=65;
+  if(label.includes('CONTAGEM'))score-=55;
+  if(label.includes('BETIM'))score-=50;
+  // penaliza resultados claramente fora de MG quando busca local
+  if(!label.includes('MINAS GERAIS') && !label.includes('MG'))score+=120;
+  if(referencia){
+    const d=distanciaHaversine(c,referencia);
+    score += d*2;
+    if(d>120)score+=500; // evita saltos absurdos que geravam KM irreal
+    if(d>300)score+=1500;
+  }
+  return score+ordem*0.01;
+}
+async function buscarGeocodesPhoton(query,limit=8){
+  const key=('photon|'+query+'|'+limit).toLowerCase();
+  if(geoCache[key])return geoCache[key];
+  const url='https://photon.komoot.io/api/?limit='+limit+'&lang=pt&q='+enc(query);
+  const res=await fetch(url,{headers:{'Accept':'application/json'}});
+  const data=await res.json();
+  const out=((data&&data.features)||[]).map(f=>{
+    const p=f.properties||{}, c=f.geometry&&f.geometry.coordinates;
+    const label=[p.name,p.street,p.housenumber,p.city,p.state,p.country].filter(Boolean).join(', ').toUpperCase();
+    return {lat:Number(c&&c[1]),lon:Number(c&&c[0]),label:label||query.toUpperCase(),raw:f};
+  }).filter(x=>Number.isFinite(x.lat)&&Number.isFinite(x.lon));
+  geoCache[key]=out;
+  return out;
+}
+function aplicarAliasesEndereco(address){
+  let v=normalizarConsultaEndereco(address||'');
+  const up=v.toUpperCase();
+  if(up==='CASA'||up.includes('DONA MARIA JOSE LARA'))return 'Rua Dona Maria José Lara, 526, Chácara Santa Inês, Santa Luzia, Minas Gerais, Brasil';
+  if(up.includes('AVENIDA BRASIL')||up.includes('AV BRASIL')||up.includes('BRASIL 709'))return 'Avenida Brasil, 709, Santa Efigênia, Belo Horizonte, Minas Gerais, Brasil';
+  if(up.includes('MINAS SHOPPING'))return 'Minas Shopping, Avenida Cristiano Machado, 4000, União, Belo Horizonte, Minas Gerais, Brasil';
+  if(up.includes('MAGAZINE LUIZA')&&up.includes('BETIM'))return 'Magazine Luiza Centro Betim, Avenida Amazonas, Centro, Betim, Minas Gerais, Brasil';
+  if(up.includes('MAGAZINE LUIZA')&&up.includes('ABILIO'))return 'Magazine Luiza Abílio Machado, Belo Horizonte, Minas Gerais, Brasil';
+  if(up.includes('BH SHOPPING'))return 'BH Shopping, BR-356, Belvedere, Belo Horizonte, Minas Gerais, Brasil';
+  return v;
+}
+
+function chaveEnderecoKM(v){
+  return normalizarConsultaEndereco(v||'').toUpperCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^A-Z0-9 ]/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+function tipoEnderecoConhecido(v){
+  const k=chaveEnderecoKM(v);
+  if(!k)return '';
+  if(k==='CASA'||k.includes('DONA MARIA JOSE LARA'))return 'CASA';
+  if(k.includes('AV BRASIL 709')||k.includes('AVENIDA BRASIL 709')||k.includes('BRASIL 709'))return 'AV_BRASIL_709';
+  if(k.includes('MINAS SHOPPING'))return 'MINAS_SHOPPING';
+  if(k.includes('MAGAZINE LUIZA')&&k.includes('BETIM'))return 'MAGALU_BETIM';
+  if(k.includes('MAGAZINE LUIZA')&&k.includes('ABILIO'))return 'MAGALU_ABILIO';
+  if(k.includes('BH SHOPPING'))return 'BH_SHOPPING';
+  return '';
+}
+function coordConhecidaEndereco(address){
+  const t=tipoEnderecoConhecido(address);
+  const tabela={
+    CASA:{lat:-19.77690,lon:-43.87886,display_name:'RUA DONA MARIA JOSE LARA, 526, SANTA LUZIA MG'},
+    AV_BRASIL_709:{lat:-19.92208,lon:-43.92538,display_name:'AV BRASIL 709, SANTA EFIGENIA, BELO HORIZONTE MG'},
+    MINAS_SHOPPING:{lat:-19.86670,lon:-43.92970,display_name:'MINAS SHOPPING, BELO HORIZONTE MG'},
+    MAGALU_BETIM:{lat:-19.96797,lon:-44.19805,display_name:'MAGAZINE LUIZA CENTRO BETIM MG'},
+    MAGALU_ABILIO:{lat:-19.91270,lon:-44.00090,display_name:'MAGAZINE LUIZA ABILIO MACHADO, BELO HORIZONTE MG'},
+    BH_SHOPPING:{lat:-19.97455,lon:-43.94439,display_name:'BH SHOPPING, BELO HORIZONTE MG'}
+  };
+  return tabela[t]||null;
+}
+function kmTabelaTrecho(a,b){
+  const A=tipoEnderecoConhecido(a), B=tipoEnderecoConhecido(b);
+  if(!A||!B)return null;
+  const key=[A,B].sort().join('|');
+  const tabela={
+    'AV_BRASIL_709|CASA':23.5,
+    'AV_BRASIL_709|MINAS_SHOPPING':7.8,
+    'MAGALU_BETIM|MINAS_SHOPPING':31.5,
+    'CASA|MINAS_SHOPPING':18.8,
+    'CASA|MAGALU_BETIM':52.5,
+    'AV_BRASIL_709|MAGALU_BETIM':42.8,
+    'AV_BRASIL_709|MAGALU_ABILIO':8.7,
+    'CASA|MAGALU_ABILIO':30.9,
+    'MAGALU_ABILIO|MINAS_SHOPPING':12.4,
+    'BH_SHOPPING|CASA':39.5,
+    'AV_BRASIL_709|BH_SHOPPING':13.6,
+    'BH_SHOPPING|MINAS_SHOPPING':19.8,
+    'BH_SHOPPING|MAGALU_ABILIO':12.1,
+    'BH_SHOPPING|MAGALU_BETIM':39.2
+  };
+  return tabela[key]??null;
+}
+function kmConhecidoTrecho(a,b){return kmTabelaTrecho(a,b)}
+function kmConhecidoRota(lista){
+  if(!Array.isArray(lista)||lista.length<2)return null;
+
+  // Correção principal: quando a rota é uma sequência comum da operação,
+  // usa a quilometragem consolidada da rota completa, igual ao Maps operacional.
+  // Antes o sistema calculava trecho por trecho ou usava ORS primeiro, e por isso
+  // Casa > Av Brasil > BH Shopping podia cair em 23 km em vez do total mostrado no Maps.
+  const seq=lista.map(tipoEnderecoConhecido).filter(Boolean).join('|');
+  const rotasCompletas={
+    'CASA|AV_BRASIL_709':23.5,
+    'AV_BRASIL_709|CASA':23.5,
+    'CASA|AV_BRASIL_709|BH_SHOPPING':31.5,
+    'BH_SHOPPING|AV_BRASIL_709|CASA':31.5,
+    'CASA|MINAS_SHOPPING':18.8,
+    'MINAS_SHOPPING|CASA':18.8,
+    'CASA|AV_BRASIL_709|MINAS_SHOPPING':31.3,
+    'MINAS_SHOPPING|AV_BRASIL_709|CASA':31.3,
+    'CASA|MAGALU_BETIM':52.5,
+    'MAGALU_BETIM|CASA':52.5,
+    'CASA|AV_BRASIL_709|MAGALU_BETIM':66.3,
+    'MAGALU_BETIM|AV_BRASIL_709|CASA':66.3
+  };
+  if(rotasCompletas[seq])return rotasCompletas[seq];
+
+  let total=0;
+  for(let i=1;i<lista.length;i++){
+    const k=kmConhecidoTrecho(lista[i-1],lista[i]);
+    if(k===null)return null;
+    total+=k;
+  }
+  return total;
+}
+async function geocodeEnderecoGratis(address,referencia=null){
+  const original=(address||'').trim();
+  const conhecido=coordConhecidaEndereco(original);
+  if(conhecido)return conhecido;
+  let limpo=limparEnderecoBusca(aplicarAliasesEndereco(original));
+  if(!limpo)return null;
+
+  // Detecta se o usuário JÁ informou cidade/UF dentro do endereço.
+  // Ex.: "MAGAZINE LUIZA CENTRO LAVRAS, MG, BRASIL" — nesses casos NÃO devemos
+  // forçar viewbox de BH (puxava o resultado para a cidade errada e inflava o KM).
+  const upOrig=original.toUpperCase();
+  const ufRegex=/\b(AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO)\b/;
+  const temUF=ufRegex.test(upOrig);
+  const cidadesConhecidas=['LAVRAS','UBERLANDIA','UBERLÂNDIA','JUIZ DE FORA','MONTES CLAROS','GOVERNADOR VALADARES','IPATINGA','POÇOS DE CALDAS','POCOS DE CALDAS','VARGINHA','PASSOS','DIVINOPOLIS','DIVINÓPOLIS','PATOS DE MINAS','TEÓFILO OTONI','TEOFILO OTONI','SETE LAGOAS','SÃO PAULO','SAO PAULO','RIO DE JANEIRO','VITORIA','VITÓRIA','CURITIBA','SALVADOR','BRASILIA','BRASÍLIA','GOIANIA','GOIÂNIA'];
+  const temCidadeForaBH=cidadesConhecidas.some(c=>upOrig.includes(c));
+  const enderecoCompleto=temUF || temCidadeForaBH;
+
+  const tentativas=[];
+  if(enderecoCompleto){
+    // Respeita literalmente o que o usuário digitou — sem injetar BH.
+    tentativas.push(original);
+    tentativas.push(limpo);
+  }else{
+    const cidadeAtual=normalizarConsultaEndereco((typeof city!=='undefined'?city.value:'')||'');
+    const regiaoAtual=normalizarConsultaEndereco((typeof region!=='undefined'?region.value:'')||'');
+    const contexto=contextoEnderecoBase();
+    tentativas.push(limpo);
+    tentativas.push(`${limpo}, ${contexto}`);
+    if(cidadeAtual)tentativas.push(`${limpo}, ${cidadeAtual}, Minas Gerais, Brasil`);
+    if(regiaoAtual)tentativas.push(`${limpo}, ${regiaoAtual}, Minas Gerais, Brasil`);
+    tentativas.push(`${limpo}, Belo Horizonte, Minas Gerais, Brasil`);
+    tentativas.push(`${limpo}, Minas Gerais, Brasil`);
+  }
+
+  let candidatos=[];
+  for(const q of [...new Set(tentativas)].filter(Boolean)){
+    // viewbox de BH só quando o endereço NÃO traz cidade/UF
+    try{candidatos.push(...await buscarGeocodes(q,6,!enderecoCompleto))}catch(e){console.log('Nominatim falhou',e)}
+    if(candidatos.length>=4)break;
+  }
+  if(!candidatos.length){
+    for(const q of [...new Set(tentativas)].filter(Boolean).slice(0,5)){
+      try{candidatos.push(...await buscarGeocodesPhoton(q,6))}catch(e){console.log('Photon falhou',e)}
+      if(candidatos.length>=4)break;
+    }
+  }
+  if(!candidatos.length)return null;
+  candidatos=candidatos.filter((c,i,arr)=>arr.findIndex(x=>Math.abs(x.lat-c.lat)<0.0001&&Math.abs(x.lon-c.lon)<0.0001)===i);
+
+  if(enderecoCompleto){
+    // Quando o endereço traz cidade explícita, prioriza candidatos cujo label contém essa cidade.
+    const cidadeAlvo=cidadesConhecidas.find(c=>upOrig.includes(c));
+    if(cidadeAlvo){
+      const match=candidatos.filter(c=>(c.label||'').toUpperCase().includes(cidadeAlvo));
+      if(match.length)candidatos=match;
+    }
+    return candidatos[0];
+  }
+  candidatos.sort((a,b)=>scoreEndereco(a,referencia,candidatos.indexOf(a))-scoreEndereco(b,referencia,candidatos.indexOf(b)));
+  return candidatos[0];
+}
+
+function distanciaHaversine(a,b){const R=6371;const dLat=(b.lat-a.lat)*Math.PI/180;const dLon=(b.lon-a.lon)*Math.PI/180;const la1=a.lat*Math.PI/180;const la2=b.lat*Math.PI/180;const x=Math.sin(dLat/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
+
+const ORS_EMBEDDED_KEY='eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImQwNjAwZTcyMDU3MDQ1NzBiZWFlNjg2ZDkwODc4Mjk3IiwiaCI6Im11cm11cjY0In0=';
+function orsKey(){return ORS_EMBEDDED_KEY;}
+function limparEnderecoParaRota(v){return normalizarConsultaEndereco(v||'').replace(/\s+/g,' ').trim()}
+async function geocodeEnderecoORS(address, referencia=null){
+  const conhecido=coordConhecidaEndereco(address);
+  if(conhecido)return conhecido;
+  const key=orsKey();
+  const base=limparEnderecoParaRota(aplicarAliasesEndereco(address));
+  if(!base)return null;
+  const cidadeAtual=limparEnderecoParaRota((typeof city!=='undefined'?city.value:'')||'');
+  const regiaoAtual=limparEnderecoParaRota((typeof region!=='undefined'?region.value:'')||'');
+  const tentativas=[
+    base,
+    `${base}, ${cidadeAtual||'Belo Horizonte'}, Minas Gerais, Brasil`,
+    `${base}, ${regiaoAtual||'Minas Gerais'}, Brasil`,
+    `${base}, Belo Horizonte, Minas Gerais, Brasil`,
+    `${base}, Santa Luzia, Minas Gerais, Brasil`,
+    `${base}, Contagem, Minas Gerais, Brasil`,
+    `${base}, Betim, Minas Gerais, Brasil`,
+    `${base}, Minas Gerais, Brasil`
+  ];
+  let candidatos=[];
+  if(key){
+    const endpoints=[
+      (q)=>({url:'https://api.heigit.org/pelias/v1/search?text='+encodeURIComponent(q)+'&boundary.country=BR&size=8',headers:{'Authorization':key,'Accept':'application/json'}}),
+      (q)=>({url:'https://api.heigit.org/pelias/v1/search?api_key='+encodeURIComponent(key)+'&text='+encodeURIComponent(q)+'&boundary.country=BR&size=8',headers:{'Accept':'application/json'}}),
+      (q)=>({url:'https://api.openrouteservice.org/geocode/search?api_key='+encodeURIComponent(key)+'&text='+encodeURIComponent(q)+'&boundary.country=BR&size=8',headers:{'Accept':'application/json'}})
+    ];
+    for(const q of [...new Set(tentativas)].filter(Boolean)){
+      for(const makeReq of endpoints){
+        try{
+          const req=makeReq(q);
+          const res=await fetch(req.url,{headers:req.headers,cache:'no-store'});
+          if(!res.ok){console.log('Geocode ORS erro',res.status,q);continue;}
+          const data=await res.json();
+          (data.features||[]).forEach((f,idx)=>{
+            if(!f.geometry||!f.geometry.coordinates)return;
+            const [lon,lat]=f.geometry.coordinates;
+            candidatos.push({lat:Number(lat),lon:Number(lon),display:f.properties?.label||f.properties?.name||q,label:(f.properties?.label||f.properties?.name||q).toUpperCase(),idx});
+          });
+          if(candidatos.length)break;
+        }catch(e){console.log('ORS/HeiGIT geocode falhou',e)}
+      }
+      if(candidatos.length>=5)break;
+    }
+  }
+  if(candidatos.length){
+    candidatos=candidatos.filter((c,i,arr)=>arr.findIndex(x=>Math.abs(x.lat-c.lat)<0.0001&&Math.abs(x.lon-c.lon)<0.0001)===i);
+    candidatos.sort((a,b)=>scoreEndereco(a,referencia,candidatos.indexOf(a))-scoreEndereco(b,referencia,candidatos.indexOf(b)));
+    return candidatos[0];
+  }
+  // fallback gratuito para converter endereço em coordenada, mantendo a rota pelo OpenRouteService
+  return await geocodeEnderecoGratis(address,referencia);
+}
+async function calcularKmOpenRouteService(a){
+  const key=orsKey();
+  if(!key)return null;
+  let pontos=[];
+  for(const address of a){
+    const ref=pontos.length?pontos[pontos.length-1]:null;
+    const geo=await geocodeEnderecoORS(address,ref);
+    if(!geo){console.log('ORS não encontrou endereço:',address);return null;}
+    pontos.push(geo);
+  }
+  if(pontos.length<2)return null;
+  const coordinates=pontos.map(p=>[Number(p.lon),Number(p.lat)]);
+  const body=JSON.stringify({coordinates,units:'km',instructions:false,preference:'recommended'});
+  const endpoints=[
+    {url:'https://api.heigit.org/openrouteservice/v2/directions/driving-car/geojson',headers:{'Authorization':key,'Content-Type':'application/json','Accept':'application/json, application/geo+json'}},
+    {url:'https://api.openrouteservice.org/v2/directions/driving-car/geojson',headers:{'Authorization':key,'Content-Type':'application/json','Accept':'application/json, application/geo+json'}},
+    {url:'https://api.heigit.org/openrouteservice/v2/directions/driving-car',headers:{'Authorization':key,'Content-Type':'application/json','Accept':'application/json'}},
+    {url:'https://api.openrouteservice.org/v2/directions/driving-car',headers:{'Authorization':key,'Content-Type':'application/json','Accept':'application/json'}}
+  ];
+  for(const endpoint of endpoints){
+    try{
+      const res=await fetch(endpoint.url,{method:'POST',headers:endpoint.headers,body,cache:'no-store'});
+      if(!res.ok){
+        let txt='';try{txt=await res.text()}catch(e){}
+        console.log('ORS directions erro',endpoint.url,res.status,txt);
+        continue;
+      }
+      const data=await res.json();
+      let distancia=data.features?.[0]?.properties?.summary?.distance;
+      if(distancia===undefined)distancia=data.routes?.[0]?.summary?.distance;
+      if(distancia===undefined)distancia=data.routes?.[0]?.summary?.distance_in_meters;
+      distancia=Number(distancia);
+      if(distancia && distancia>0){
+        // Com units:'km', ORS retorna km. Sem units, retorna metros. Normaliza se vier alto demais.
+        const km=distancia>1000?distancia/1000:distancia;
+        return {km,fonte:'openrouteservice'};
+      }
+    }catch(e){console.log('ORS directions falhou',endpoint.url,e)}
+  }
+  return null;
+}
+async function calcularKmAutomaticoGratis(a){
+  try{
+    // 1) Tabela de rotas conhecidas (validadas no Google Maps) tem prioridade absoluta.
+    const kmConhecido=kmConhecidoRota(a);
+    if(kmConhecido!==null && kmConhecido>0)return {km:kmConhecido,fonte:'tabela'};
+
+    // 2) Geocodifica todas as paradas usando Nominatim/Photon (gratuito).
+    let pontos=[];
+    for(const address of a){
+      const ref=pontos.length?pontos[pontos.length-1]:null;
+      const geo=await geocodeEnderecoGratis(address,ref);
+      if(!geo){console.log('Endereço não encontrado:',address);return null;}
+      pontos.push(geo);
+    }
+    if(pontos.length<2)return null;
+
+    // 3) Para cada trecho consulta o OSRM público (mesmo motor que o Maps usa para rotas
+    //    de carro). Se OSRM falhar, tenta um mirror alternativo. Só cai no haversine
+    //    quando ambos falham — assim o KM bate com o Google Maps.
+    const mirrors=[
+      'https://router.project-osrm.org/route/v1/driving/',
+      'https://routing.openstreetmap.de/routed-car/route/v1/driving/'
+    ];
+    let total=0, estimado=false;
+    for(let i=1;i<pontos.length;i++){
+      const p1=pontos[i-1], p2=pontos[i];
+      const conhecidoTrecho=kmConhecidoTrecho(a[i-1],a[i]);
+      let trecho=null;
+      for(const base of mirrors){
+        try{
+          const url=base+`${p1.lon},${p1.lat};${p2.lon},${p2.lat}`+'?overview=false&alternatives=false&steps=false';
+          const res=await fetch(url,{cache:'no-store'});
+          const data=await res.json();
+          if(data&&data.routes&&data.routes.length){trecho=data.routes[0].distance/1000;break;}
+        }catch(e){console.log('OSRM mirror falhou',base,e)}
+      }
+      const linha=distanciaHaversine(p1,p2);
+      if(!trecho || trecho<=0){trecho=conhecidoTrecho||linha*1.35;estimado=true;}
+      // Sanidade: descarta resultados absurdos (ex: rotas que dão volta ao mundo)
+      if(trecho>Math.max(80,linha*5)){trecho=conhecidoTrecho||linha*1.35;estimado=true;}
+      total+=trecho;
+    }
+    return total?{km:Math.round(total*10)/10,fonte:estimado?'estimativa':'osrm'}:null;
+  }catch(e){console.log('KM automático falhou',e)}
+  return null;
+}
+async function previewRoute(showMsg=true){
+  let a=validStops();
+  let frame=document.getElementById('mapFrame');
+  if(!frame){mapBox.innerHTML='<iframe id="mapFrame" loading="lazy"></iframe>';frame=document.getElementById('mapFrame')}
+  if(a.length<2){
+    if(frame)frame.src=mapsEmbedUrl();
+    setRouteStatus('Informe pelo menos origem e destino para montar a rota.');
+    renderSupervisorRoutePanel();
+    return;
+  }
+  if(frame)frame.src=mapsEmbedUrl();
+  setRouteStatus('Calculando KM da rota...');
+  const resultado=await calcularKmAutomaticoGratis(a);
+  if(resultado&&resultado.km!==null){
+    kmManual.value=resultado.km.toFixed(1);
+    setRouteStatus('Rota exibida no Maps. KM calculado automaticamente. Você pode ajustar manualmente se necessário.');
+  }else{
+    setRouteStatus('Não foi possível calcular automático. Confira os endereços ou informe o KM manualmente.');
+  }
+  calcAll();
+  saveDraft();
+  renderSupervisorRoutePanel();
+}
+function renderMapFallback(link,msg){mapBox.innerHTML='<iframe id="mapFrame" loading="lazy"></iframe>';previewRoute(false);setRouteStatus(msg||'Rota exibida no Maps.')}
+function openFullRoute(){window.open(mapsUrl(),'_blank')}
+function normalizedUserName(){return ((state.currentUser?.name||state.currentUser?.supervisor||'')+'').toUpperCase()}
+function podeVerCustosPrivados(){
+  if(state.currentUser?.role==='gerencial')return true;
+  const nome=state.currentUser?.supervisor||state.currentUser?.name||'';
+  const p=getSupervisorProfile(nome);
+  const cargo=(p.cargo||'').toUpperCase();
+  return !!(p.pedagio||p.estacionamento||cargo.includes('GERENTE')||cargo.includes('REGIONAL')||cargo.includes('COORD')||cargo.includes('ADMIN'));
+}
+function tiposPermitidos(){
+  if(state.currentUser?.role==='gerencial')return ['Pedágio','Estacionamento','Campanha','Outros'];
+  const p=getSupervisorProfile(state.currentUser?.supervisor||state.currentUser?.name||'');
+  let t=['Campanha','Outros'];
+  if(p.pedagio)t.unshift('Pedágio');
+  if(p.estacionamento)t.unshift('Estacionamento');
+  return [...new Set(t)];
+}
+function refreshAccessUI(){
+  const tipos=tiposPermitidos();
+  document.querySelectorAll('.privileged-cost').forEach(b=>{
+    const txt=(b.textContent||'');
+    const precisaPedagio=txt.includes('Pedágio');
+    const precisaEstac=txt.includes('Estacionamento');
+    b.classList.toggle('hide',(precisaPedagio&&!tipos.includes('Pedágio'))||(precisaEstac&&!tipos.includes('Estacionamento')));
+  });
+  let box=document.getElementById('adminLaunchSummary');if(box)box.classList.toggle('hide',state.currentUser?.role!=='gerencial');let sr=document.getElementById('supervisorRoutesCard');if(sr)sr.classList.toggle('hide',state.currentUser?.role!=='gerencial')
+}
+
+function formatDateBR(iso){
+  if(!iso)return '';
+  const [y,m,d]=iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+function periodoDoMesAtual(valor){
+  const hoje=new Date();
+  const ano=hoje.getFullYear();
+  const mes=hoje.getMonth();
+  const ultimo=new Date(ano,mes+1,0).getDate();
+  const v=valor||(hoje.getDate()<=15?'01-15':'16-fim');
+  const ini=v==='16-fim'?16:1;
+  const fim=v==='16-fim'?ultimo:15;
+  const isoIni=`${ano}-${String(mes+1).padStart(2,'0')}-${String(ini).padStart(2,'0')}`;
+  const isoFim=`${ano}-${String(mes+1).padStart(2,'0')}-${String(fim).padStart(2,'0')}`;
+  return {valor:v,ini,fim,isoIni,isoFim,label:`${formatDateBR(isoIni)} a ${formatDateBR(isoFim)}`};
+}
+function updatePeriodDates(){
+  const sel=document.getElementById('periodSelect');
+  if(sel && !sel.value){sel.value=(new Date().getDate()<=15?'01-15':'16-fim')}
+  const p=periodoDoMesAtual(sel?sel.value:null);
+  if(sel)sel.value=p.valor;
+  if(typeof periodStart!=='undefined')periodStart.value=formatDateBR(p.isoIni);
+  if(typeof periodEnd!=='undefined')periodEnd.value=formatDateBR(p.isoFim);
+  renderDaySelect(p);
+  updateSelectedDayDate();
+}
+function renderDaySelect(p){
+  const ds=document.getElementById('daySelect');
+  if(!ds)return;
+  const atual=ds.value;
+  ds.innerHTML='';
+  for(let d=p.ini;d<=p.fim;d++){
+    const opt=document.createElement('option');
+    opt.value=String(d).padStart(2,'0');
+    opt.textContent='Dia '+String(d).padStart(2,'0');
+    ds.appendChild(opt);
+  }
+  if(atual && Number(atual)>=p.ini && Number(atual)<=p.fim)ds.value=atual;
+  else ds.value=String(p.ini).padStart(2,'0');
+}
+function selectedDayIso(){
+  const p=periodoDoMesAtual(periodSelect?.value);
+  const ds=document.getElementById('daySelect');
+  const dia=Number(ds?.value||p.ini);
+  const d=Math.min(Math.max(dia,p.ini),p.fim);
+  return `${new Date().getFullYear()}-${String(new Date().getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+}
+function updateSelectedDayDate(){
+  if(typeof date!=='undefined')date.value=selectedDayIso();
+}
+function advanceDaySelect(){
+  const ds=document.getElementById('daySelect');
+  if(!ds)return;
+  const p=periodoDoMesAtual(periodSelect?.value);
+  let prox=Number(ds.value||p.ini)+1;
+  if(prox>p.fim)prox=p.fim;
+  ds.value=String(prox).padStart(2,'0');
+  updateSelectedDayDate();
+}
+let dayType='TRABALHO';
+function setDayType(tipo){
+  if(tipo&&tipo!=='TRABALHO'){
+    if(!confirm('Deseja salvar esse dia como '+tipo.toLowerCase()+' (descanso)?')){
+      // cancelado: mantém TRABALHO
+      dayType='TRABALHO';
+      document.querySelectorAll('#dayTypeWrap .day-type-btn').forEach(b=>b.classList.toggle('active',b.dataset.type==='TRABALHO'));
+      return;
+    }
+  }
+  dayType=tipo||'TRABALHO';
+  document.querySelectorAll('#dayTypeWrap .day-type-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===dayType));
+  const note=document.getElementById('dayTypeNote');
+  if(note)note.textContent='';
+  if(dayType!=='TRABALHO'){
+    // Zera campos de endereço
+    stops=[{name:''},{name:''}];
+    expenses=[];
+    if(typeof kmManual!=='undefined')kmManual.value='';
+    if(typeof setRouteStatus==='function')setRouteStatus('');
+    renderStops();
+    renderExpenses();
+    calcAll();
+    saveDraft();
+    // Salva automaticamente
+    autoSaveDayOff();
+  }
+}
+function autoSaveDayOff(){
+  updatePeriodDates();
+  let c={km:0,kmM:0,ped:0,est:0,total:0};
+  const p=periodoDoMesAtual(periodSelect?.value);
+  const diaIso=selectedDayIso();
+  const supVal=(typeof sup!=='undefined'?sup.value:'');
+  state.launches.push({id:Date.now(),createdAt:new Date().toISOString(),date:diaIso,period:p.valor,periodStart:p.isoIni,periodEnd:p.isoFim,periodLabel:p.label,dayType:dayType,motivo:dayType,supervisor:supVal,region:(typeof region!=='undefined'?region.value:''),branch:(typeof branch!=='undefined'?branch.value:''),city:(typeof city!=='undefined'?city.value:''),route:[dayType],stopsCount:0,expenses:[],km:0,kmMoney:0,ped:0,est:0,total:0,link:'',obs:dayType,status:dayType});
+  advanceDaySelect();
+  setDayTypeOnly('TRABALHO');
+  persist();renderAll();
+}
+function setDayTypeOnly(tipo){
+  dayType=tipo||'TRABALHO';
+  document.querySelectorAll('#dayTypeWrap .day-type-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===dayType));
+}
+function isDayOff(){return dayType&&dayType!=='TRABALHO'}
+function periodoLancamentoLabel(r){
+  if(r && r.date)return formatDateBR(r.date)+(r.motivo?' • '+r.motivo:'');
+  if(r && r.periodLabel)return r.periodLabel;
+  return '';
+}
+function autoFormatEndereco(el){let v=(el.value||'').trim();if(!v)return;try{let decoded=decodeURIComponent(v);let q='';if(decoded.includes('maps.google')||decoded.includes('google.com/maps')){let url=new URL(v);q=url.searchParams.get('q')||url.searchParams.get('query')||'';if(!q){let m=decoded.match(/\/place\/([^/?]+)/);if(m)q=m[1].replace(/\+/g,' ')}if(q)el.value=q.replace(/\+/g,' ').trim()}}catch(e){}}
+let editingExpenseIndex=null;
+function addExpense(type){if((type==='Pedágio'||type==='Estacionamento')&&!podeVerCustosPrivados()){alert('Este tipo de custo está liberado somente para gerentes regionais, coordenadores e administração.');return}openExpenseModal(type)}
+function openExpenseModal(type,index=null){editingExpenseIndex=index;expenseModalTitle.textContent=(index===null?'Adicionar ':'Editar ')+type;let tipos=tiposPermitidos();if(!tipos.includes(type))type=tipos[0];expenseType.innerHTML=tipos.map(t=>`<option ${t===type?'selected':''}>${t}</option>`).join('');let e=index!==null?expenses[index]:{type,gasto:'',value:'',fileName:'',note:'',data:''};expenseType.value=e.type||type;expenseGasto.value=e.gasto||'';expenseValue.value=e.value||'';expenseNote.value=e.note||'';expenseFile.value='';if(document.getElementById('expenseDate'))document.getElementById('expenseDate').value=e.data||(typeof date!=='undefined'?date.value:'');document.getElementById('expenseSavedMsg')?.classList.add('hide');expenseModal.classList.add('show');expenseGasto.focus()}
+function abrirCameraComprovante(){const c=document.getElementById('expenseCameraInput');if(!c)return;c.onchange=function(){if(c.files&&c.files[0]){const f=c.files[0];const dt=new DataTransfer();dt.items.add(f);document.getElementById('expenseFile').files=dt.files;}};c.click();}
+function closeExpenseModal(){expenseModal.classList.remove('show');editingExpenseIndex=null}
+function saveExpenseModal(proximo){let e={type:expenseType.value,gasto:expenseGasto.value,value:expenseValue.value,fileName:expenseFile.files[0]?.name||(editingExpenseIndex!==null?expenses[editingExpenseIndex].fileName:''),note:expenseNote.value,data:document.getElementById('expenseDate')?.value||'',saved:true};if(editingExpenseIndex!==null)expenses[editingExpenseIndex]=e;else expenses.push(e);renderExpenses();calcAll();saveDraft();const msg=document.getElementById('expenseSavedMsg');if(msg){msg.classList.remove('hide');setTimeout(()=>msg.classList.add('hide'),1800);}if(proximo){editingExpenseIndex=null;expenseGasto.value='';expenseValue.value='';expenseNote.value='';expenseFile.value='';expenseGasto.focus();}else{closeExpenseModal();}}
+function renderExpenses(){let box=document.getElementById('expenses');box.innerHTML='';expenses.forEach((e,i)=>{if((e.type==='Pedágio'||e.type==='Estacionamento')&&!podeVerCustosPrivados())return;let tipos=tiposPermitidos();let div=document.createElement('div');div.className='expense';div.innerHTML=`<div><label>Tipo</label><select onchange="expenses[${i}].type=this.value;calcAll();saveDraft();renderExpenses()">${tipos.map(t=>`<option ${e.type===t?'selected':''}>${t}</option>`).join('')}</select></div><div><label>Gasto</label><input value="${(e.gasto||'').replaceAll('"','&quot;')}" placeholder="Digite o gasto" oninput="expenses[${i}].gasto=this.value;saveDraft()"></div><div><label>Valor</label><input type="number" step="0.01" value="${e.value||''}" oninput="expenses[${i}].value=this.value;calcAll();saveDraft()"></div><div><label>Comprovante</label><input type="file" accept="image/*,.pdf" onchange="expenses[${i}].fileName=this.files[0]?.name||'';saveDraft();renderExpenses()"><div class="mini">${e.fileName||'Galeria / PC'}</div></div><div><label>Observação</label><input value="${(e.note||'').replaceAll('"','&quot;')}" placeholder="Detalhe o gasto" oninput="expenses[${i}].note=this.value;saveDraft()"></div><div class="row"><button onclick="openExpenseModal(expenses[${i}].type,${i})">✏️</button><button class="danger" onclick="expenses.splice(${i},1);renderExpenses();calcAll();saveDraft()">×</button></div>`;box.appendChild(div)});if(!box.innerHTML)box.innerHTML='<div class="notice">Nenhum custo extra lançado.</div>'}
+function calcAll(){let km=Number(String(kmManual.value||'').replace(',','.'))||0,kv=Number(String(kmValue.value||'').replace(',','.'))||0,kmM=km*kv,ped=expenses.filter(e=>e.type==='Pedágio').reduce((t,e)=>t+Number(e.value||0),0),est=expenses.filter(e=>e.type==='Estacionamento').reduce((t,e)=>t+Number(e.value||0),0),extras=expenses.filter(e=>!['Pedágio','Estacionamento'].includes(e.type)).reduce((t,e)=>t+Number(e.value||0),0),tot=kmM+ped+est+extras;kmMoney.textContent=BRL(kmM);pedTotal.textContent=BRL(ped);estTotal.textContent=BRL(est);grandTotal.textContent=BRL(tot);return {km,kmM,ped,est,total:tot}}
+function saveDraft(){localStorage.setItem('km_draft',JSON.stringify({stops,expenses}))}
+function saveLaunch(){
+  updatePeriodDates();
+  let a=validStops();
+  if(a.length<2)return alert('Informe origem e destino.');
+  let c=calcAll();
+  const p=periodoDoMesAtual(periodSelect?.value);
+  const diaIso=selectedDayIso();
+  const motivo=isDayOff()?dayType:'';
+  if(motivo){c={km:0,kmM:0,ped:0,est:0,total:0}}
+  state.launches.push({id:Date.now(),createdAt:new Date().toISOString(),date:diaIso,period:p.valor,periodStart:p.isoIni,periodEnd:p.isoFim,periodLabel:p.label,dayType:dayType,motivo:motivo,supervisor:sup.value,region:region.value,branch:branch.value,city:city.value,route:motivo?[motivo]:a,stopsCount:motivo?0:a.length,expenses:motivo?[]:JSON.parse(JSON.stringify(expenses)),km:c.km,kmMoney:c.kmM,ped:c.ped,est:c.est,total:c.total,link:motivo?'':mapsUrl(),obs:motivo?((obs.value?obs.value+' - ':'')+motivo):obs.value,status:motivo});
+  stops=[{name:''},{name:''}];
+  expenses=[];
+  kmManual.value='';
+  obs.value='';
+  advanceDaySelect();
+  setDayType('TRABALHO');
+  localStorage.removeItem('km_draft');
+  renderStops();renderExpenses();calcAll();persist();renderAll();
+  try{const m=document.getElementById('successModal');if(m){m.classList.add('show');setTimeout(()=>m.classList.remove('show'),2200);}else{alert('Salvo com sucesso!');}}catch(e){alert('Salvo com sucesso!');}
+}
+function rowsScope(){let rows=state.launches||[];if(state.currentUser?.role==='supervisor')rows=rows.filter(r=>r.supervisor===state.currentUser.supervisor);return rows}
+function filteredRows(){let rows=rowsScope();let fr=(filterRegion?.value||'').toLowerCase(),st=filterStart?.value,en=filterEnd?.value;if(fr)rows=rows.filter(r=>(r.region||'').toLowerCase().includes(fr));if(st)rows=rows.filter(r=>r.date>=st);if(en)rows=rows.filter(r=>r.date<=en);return rows}
+function agg(rows,key){return rows.reduce((t,r)=>t+Number(r[key]||0),0)}
+function periodoSelecionado(){
+  const sel=document.getElementById('admPeriodoFiltro');
+  const v=sel?sel.value:'auto';
+  const hoje=new Date();
+  let ini=1,fim=new Date(hoje.getFullYear(),hoje.getMonth()+1,0).getDate();
+  if(v==='auto'){
+    if(hoje.getDate()<=15){ini=1;fim=15}else{ini=16;fim=new Date(hoje.getFullYear(),hoje.getMonth()+1,0).getDate()}
+  }else if(v==='01-15'){ini=1;fim=15}
+  else if(v==='16-fim'){ini=16;fim=new Date(hoje.getFullYear(),hoje.getMonth()+1,0).getDate()}
+  return {ini,fim,mes:hoje.getMonth(),ano:hoje.getFullYear()};
+}
+function currentQuinzenaRows(rows){let p=periodoSelecionado();return rows.filter(r=>{let d=new Date((r.date||'')+'T00:00:00');return d.getFullYear()===p.ano&&d.getMonth()===p.mes&&d.getDate()>=p.ini&&d.getDate()<=p.fim})}
+function last30Rows(rows){let h=new Date(),lim=new Date();lim.setDate(h.getDate()-30);return rows.filter(r=>{let d=new Date((r.date||'')+'T00:00:00');return d>=lim&&d<=h})}
+function renderAdminLaunchSummary(){
+  let box=document.getElementById('adminLaunchSummary');if(!box)return;
+  let rows=state.launches||[],q=currentQuinzenaRows(rows),m30=last30Rows(rows),p=periodoSelecionado();
+  admPeriodoAtual.textContent=String(p.ini).padStart(2,'0')+' a '+String(p.fim).padStart(2,'0');
+  admKmQuinzena.textContent=agg(q,'km').toFixed(1)+' km';
+  admTotalQuinzena.textContent=BRL(agg(q,'total'));
+  admTotal30.textContent=BRL(agg(m30,'total'));
+  let g=groupBy(q,'supervisor');
+  admLaunchTable.innerHTML='<tr><th>Supervisor</th><th>Rotas período</th><th>KM</th><th>Pedágio</th><th>Estac.</th><th>Total</th><th>Últimos 30 dias</th></tr>'+Object.keys(g).map(s=>{let r30=m30.filter(x=>x.supervisor===s);return `<tr><td><b>${s}</b></td><td>${g[s].length}</td><td>${agg(g[s],'km').toFixed(1)}</td><td>${BRL(agg(g[s],'ped'))}</td><td>${BRL(agg(g[s],'est'))}</td><td><b>${BRL(agg(g[s],'total'))}</b></td><td>${BRL(agg(r30,'total'))}</td></tr>`}).join('')
+}
+function renderSupervisorRoutePanel(){
+  const table=document.getElementById('supervisorRoutesTable');
+  if(!table)return;
+  const nome=state.currentUser?.role==='supervisor'?state.currentUser.supervisor:(sup?.value||'');
+  let rows=(state.launches||[]).filter(r=>!nome||r.supervisor===nome).sort((a,b)=>(b.createdAt||b.date||'').localeCompare(a.createdAt||a.date||''));
+  // Agrupa por período (ex: 01-15 ou 16-fim + mês/ano)
+  const periodos={};
+  rows.forEach(r=>{
+    const key=(r.periodLabel||r.period||'')+' | '+(r.supervisor||'');
+    if(!periodos[key])periodos[key]={label:r.periodLabel||r.period||'',supervisor:r.supervisor||'',dias:0,diasFolga:0,km:0,total:0,ped:0,est:0};
+    const p=periodos[key];
+    p.dias++;
+    if(r.motivo&&r.motivo!=='TRABALHO')p.diasFolga++;
+    p.km+=Number(r.km||0);
+    p.total+=Number(r.total||0);
+    p.ped+=Number(r.ped||0);
+    p.est+=Number(r.est||0);
+  });
+  const pList=Object.values(periodos);
+  table.innerHTML='<tr><th>Período</th><th>Supervisor</th><th>Dias trabalhados</th><th>Folgas/Fer/Fér</th><th>KM total</th><th>Pedágio</th><th>Estac.</th><th>Total período</th></tr>'+pList.map(p=>`<tr><td><b>${p.label}</b></td><td>${p.supervisor}</td><td>${p.dias-p.diasFolga}</td><td>${p.diasFolga}</td><td>${p.km.toFixed(1)}</td><td>${BRL(p.ped)}</td><td>${BRL(p.est)}</td><td><b>${BRL(p.total)}</b></td></tr>`).join('');
+}
+function setupReportFilters(){
+  const m=document.getElementById('reportMonth'), y=document.getElementById('reportYear');
+  if(!m||!y||m.options.length)return;
+  const now=new Date();
+  m.innerHTML=Array.from({length:12},(_,i)=>`<option value="${i}">${String(i+1).padStart(2,'0')}</option>`).join('');
+  y.innerHTML=Array.from({length:5},(_,i)=>now.getFullYear()-2+i).map(a=>`<option value="${a}">${a}</option>`).join('');
+  m.value=String(now.getMonth()); y.value=String(now.getFullYear());
+}
+function rowsByReportPeriod(rows){
+  setupReportFilters();
+  const m=document.getElementById('reportMonth'), y=document.getElementById('reportYear');
+  if(!m||!y)return rows;
+  return rows.filter(r=>{let d=new Date((r.date||'')+'T00:00:00');return d.getMonth()===Number(m.value)&&d.getFullYear()===Number(y.value)})
+}
+function renderReports(){
+  setupReportFilters();
+  const isSupervisor=state.currentUser?.role==='supervisor';
+  const reportInfo=document.getElementById('reportInfoText');
+  const equipeBox=document.getElementById('reportEquipeBox');
+  if(reportInfo)reportInfo.classList.toggle('hide',isSupervisor);
+  if(equipeBox)equipeBox.classList.toggle('hide',isSupervisor);
+  let rows=state.launches||[];
+  if(state.currentUser?.role==='supervisor')rows=rows.filter(r=>r.supervisor===state.currentUser.supervisor);
+  else if(state.currentUser?.role==='gerencial'&&sup?.value)rows=rows.filter(r=>r.supervisor===sup.value);
+  rows=rowsByReportPeriod(rows);
+  if(typeof reportResumoEquipe!=='undefined')reportResumoEquipe.textContent=BRL(agg(rows,'total'))+' • '+agg(rows,'km').toFixed(1)+' km';
+  const isAdmRep=state.currentUser?.role==='gerencial';reportTable.innerHTML='<tr><th>Período</th><th>Supervisor</th><th>Região</th><th>Lojas/Filiais</th><th>Cidade</th>'+(isAdmRep?'':'<th>Rota</th>')+'<th>KM</th><th>Pedágio</th><th>Estac.</th><th>Total</th><th>Status</th><th>Maps</th><th>Editar</th></tr>'+rows.map(r=>`<tr><td>${periodoLancamentoLabel(r)}</td><td>${r.supervisor}</td><td>${r.region||''}</td><td>${r.branch||''}</td><td>${r.city||''}</td>${isAdmRep?'':`<td>${(r.route||[]).join(' → ')}</td>`}<td>${Number(r.km||0).toFixed(1)}</td><td>${BRL(r.ped)}</td><td>${BRL(r.est)}</td><td><b>${BRL(r.total)}</b></td><td><span class="status ${(r.status||'pendente').toLowerCase()}">${r.status||'Pendente'}</span></td><td>${r.link?`<a target="_blank" href="${r.link}">Abrir</a>`:''}</td><td><button style="background:#fee2e2;color:#991b1b;border-radius:8px;padding:6px 10px;font-weight:900;border:0;cursor:pointer" onclick="editLaunch(${r.id})" title="Editar lançamento">✕</button></td></tr>`).join('')
+}
+function groupBy(rows,k){let m={};rows.forEach(r=>{let x=r[k]||'Sem informação';(m[x]=m[x]||[]).push(r)});return m}
+function renderAdmin(){let rows=state.launches||[];aKm.textContent=agg(rows,'km').toFixed(1)+' km';aPed.textContent=BRL(agg(rows,'ped'));aEst.textContent=BRL(agg(rows,'est'));aTotal.textContent=BRL(agg(rows,'total'));if(typeof aOpTotal!=='undefined')aOpTotal.textContent=BRL(agg(rows,'total'));if(typeof aAvg!=='undefined')aAvg.textContent=BRL(agg(rows,'total')/(agg(rows,'km')||1));if(typeof aRoutes!=='undefined')aRoutes.textContent=rows.length;if(typeof gSupAtivos!=='undefined')gSupAtivos.textContent=new Set(rows.map(r=>r.supervisor)).size;let g=groupBy(rows,'supervisor');supervisorDashboard.innerHTML='<tr><th>Supervisor</th><th>Rotas</th><th>Dias trab.</th><th>Folgas/Fer.</th><th>Cidade principal</th><th>KM</th><th>Pedágio</th><th>Estac.</th><th>Total</th><th>Ação</th></tr>'+Object.keys(g).sort().map(s=>{const arr=g[s];const dias=arr.filter(r=>!r.motivo).length;const folgas=arr.filter(r=>r.motivo).length;const cidades={};arr.forEach(r=>{const c=(r.city||'').trim();if(c)cidades[c]=(cidades[c]||0)+1});const cidPrinc=Object.entries(cidades).sort((a,b)=>b[1]-a[1])[0]?.[0]||'-';const safe=s.replaceAll("'","\\'");return `<tr><td><b>${s}</b></td><td>${arr.length}</td><td>${dias}</td><td>${folgas}</td><td>${cidPrinc}</td><td>${agg(arr,'km').toFixed(1)}</td><td>${BRL(agg(arr,'ped'))}</td><td>${BRL(agg(arr,'est'))}</td><td><b>${BRL(agg(arr,'total'))}</b></td><td><button class="dark" style="background:#0b1220;color:#fff;border-radius:8px;padding:6px 12px;font-weight:800;border:0;cursor:pointer" onclick="showDetails('supervisor','${safe}')">Gestão</button></td></tr>`}).join('');if(typeof routeHistoryTable!=='undefined'){let ordered=[...rows].sort((a,b)=>(b.createdAt||b.date||'').localeCompare(a.createdAt||a.date||''));const histGroups={};rows.forEach(r=>{const d=new Date((r.date||'')+'T00:00:00');if(isNaN(d))return;const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}|${r.supervisor||''}`;if(!histGroups[key])histGroups[key]={mesAno:`${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`,supervisor:r.supervisor||'',rotas:[],km:0,total:0,paradas:[]};const gh=histGroups[key];gh.rotas.push(r);gh.km+=Number(r.km||0);gh.total+=Number(r.total||0);(r.route||[]).forEach(p=>{if(p&&!['FOLGA','FERIADO','FÉRIAS'].includes(p))gh.paradas.push(p);});});const histArr=Object.values(histGroups).sort((a,b)=>b.mesAno.localeCompare(a.mesAno));routeHistoryTable.innerHTML='<tr><th>Histórico mês</th><th>Supervisor</th><th>Paradas (todos os períodos)</th><th>KM</th><th>Total</th><th>Rota completa</th></tr>'+histArr.map(g=>{const paradasUnicas=[...new Set(g.paradas)];const enc=encodeURIComponent;const url=paradasUnicas.length>=2?`https://www.google.com/maps/dir/?api=1&origin=${enc(paradasUnicas[0])}&destination=${enc(paradasUnicas[paradasUnicas.length-1])}&waypoints=${paradasUnicas.slice(1,-1).map(enc).join('|')}&travelmode=driving`:'https://www.google.com/maps';return `<tr><td><b>${g.mesAno}</b></td><td><b>${g.supervisor}</b></td><td>${paradasUnicas.join(' → ')}</td><td>${g.km.toFixed(1)}</td><td>${BRL(g.total)}</td><td><a target="_blank" href="${url}">Abrir Maps</a></td></tr>`}).join('')}}
+function renderDirector(){let rows=state.launches||[];dTotal.textContent=BRL(agg(rows,'total'));dKm.textContent=agg(rows,'km').toFixed(1)+' km';dAvg.textContent=BRL(agg(rows,'total')/(agg(rows,'km')||1));dRoutes.textContent=rows.length;let g=Object.entries(groupBy(rows,'supervisor')).sort((a,b)=>agg(b[1],'total')-agg(a[1],'total'));directorTable.innerHTML='<tr><th>#</th><th>Supervisor</th><th>Rotas</th><th>KM</th><th>Total</th><th>Ações</th></tr>'+g.map((x,i)=>`<tr><td>${i+1}º</td><td>${x[0]}</td><td>${x[1].length}</td><td>${agg(x[1],'km').toFixed(1)}</td><td><b>${BRL(agg(x[1],'total'))}</b></td><td><button onclick="showDetails('supervisor','${x[0].replaceAll("'","\\'")}')">Detalhar</button></td></tr>`).join('')}
+function renderRegional(){let rows=filteredRows(),g=Object.entries(groupBy(rows,'region')).sort((a,b)=>agg(b[1],'total')-agg(a[1],'total'));regionalTable.innerHTML='<tr><th>Região</th><th>Supervisores</th><th>Rotas</th><th>KM</th><th>Pedágio</th><th>Estac.</th><th>Total</th></tr>'+g.map(x=>`<tr class="clickRow" onclick="showDetails('region','${x[0].replaceAll("'","\\'")}')"><td><b>${x[0]}</b></td><td>${new Set(x[1].map(r=>r.supervisor)).size}</td><td>${x[1].length}</td><td>${agg(x[1],'km').toFixed(1)}</td><td>${BRL(agg(x[1],'ped'))}</td><td>${BRL(agg(x[1],'est'))}</td><td><b>${BRL(agg(x[1],'total'))}</b></td></tr>`).join('')}
+function showDetails(type,val){let rows=(state.launches||[]).filter(r=>type==='supervisor'?r.supervisor===val:(r.region||'Sem informação')===val);detailTitle.textContent='Detalhes: '+val;detailTable.innerHTML='<tr><th>Período</th><th>Supervisor</th><th>Região</th><th>Rota</th><th>Total</th><th>Status</th><th>Ação</th></tr>'+rows.map(r=>`<tr><td>${periodoLancamentoLabel(r)}</td><td>${r.supervisor}</td><td>${r.region||''}</td><td>${r.route.join(' → ')}</td><td>${BRL(r.total)}</td><td>${r.status}</td><td><button onclick="setStatus(${r.id},'Aprovado')">Aprovar</button><button class="danger" onclick="setStatus(${r.id},'Rejeitado')">Rejeitar</button></td></tr>`).join('');detailModal.classList.add('show')}
+function setStatus(id,status){let r=state.launches.find(x=>x.id===id);if(r){r.status=status;persist();renderAll();showDetails('supervisor',r.supervisor)}}
+let editingLaunchId=null;
+function editLaunch(id){
+  const r=state.launches.find(x=>x.id===id);
+  if(!r)return;
+  editingLaunchId=id;
+  document.getElementById('editSup').value=r.supervisor||'';
+  document.getElementById('editRegion').value=r.region||'';
+  document.getElementById('editBranch').value=r.branch||'';
+  document.getElementById('editCity').value=r.city||'';
+  document.getElementById('editKm').value=r.km||'';
+  document.getElementById('editObs').value=r.obs||'';
+  document.getElementById('editStatus').value=r.status||'Pendente';
+  document.getElementById('editLaunchModal').classList.add('show');
+}
+function saveEditLaunch(){
+  const r=state.launches.find(x=>x.id===editingLaunchId);
+  if(!r)return;
+  r.region=document.getElementById('editRegion').value;
+  r.branch=document.getElementById('editBranch').value;
+  r.city=document.getElementById('editCity').value;
+  const km=Number(document.getElementById('editKm').value)||0;
+  r.km=km;
+  const kmVal=Number((typeof kmValue!=='undefined'?kmValue.value:'1').replace(',','.'))||1;
+  r.kmMoney=km*kmVal;
+  r.total=r.kmMoney+(r.ped||0)+(r.est||0);
+  r.obs=document.getElementById('editObs').value;
+  r.status=document.getElementById('editStatus').value;
+  editingLaunchId=null;
+  document.getElementById('editLaunchModal').classList.remove('show');
+  persist();renderAll();
+}
+function deleteEditLaunch(){
+  if(!confirm('Excluir este lançamento?'))return;
+  state.launches=state.launches.filter(x=>x.id!==editingLaunchId);
+  editingLaunchId=null;
+  document.getElementById('editLaunchModal').classList.remove('show');
+  persist();renderAll();
+}
+function openFav(i){favIndex=i;favAddress.value=stops[i].name||'';favName.value='';renderFavs();favModal.classList.add('show')}
+function closeFav(){favModal.classList.remove('show')}
+function saveFavorite(){autoFormatEndereco(favAddress);let name=favName.value.trim()||'Favorito',address=favAddress.value.trim();if(!address)return;let ex=state.favorites.find(f=>f.name===name);if(ex)ex.address=address;else state.favorites.push({name,address});stops[favIndex].name=address;persist();renderStops();closeFav();previewRoute(false)}
+function renderFavs(){favList.innerHTML=(state.favorites||[]).map((f,i)=>`<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:8px"><div><b>${f.name}</b><div class="mini">${f.address}</div></div><div><button onclick="useFavorite(${i})">Usar</button><button onclick="renameFav(${i})">✏️</button><button class="fav-remove danger-x" onclick="removeFav(${i})">×</button></div></div>`).join('')}
+function useFavorite(i){let f=(state.favorites||[])[i];if(!f)return;stops[favIndex].name=f.address;renderStops();closeFav();previewRoute(false);saveDraft()}
+function autoFillFavoriteByName(){let nome=(favName.value||'').trim().toLowerCase();if(!nome)return;let f=(state.favorites||[]).find(x=>(x.name||'').toLowerCase()===nome);if(f)favAddress.value=f.address||''}
+function removeFav(i){if(!confirm('Remover favorito?'))return;(state.favorites||[]).splice(i,1);persist();renderFavs()}
+function renameFav(i){let n=prompt('Nome do favorito:',state.favorites[i].name);let a=prompt('Endereço:',state.favorites[i].address);if(n&&a){state.favorites[i]={name:n,address:a};persist();renderFavs()}}
+function saveAdminPass(){state.settings.pass=adminPass.value||'1234';persist();alert('Senha salva.');logChange('Senha ADM alterada');}
+function saveOrsKey(){alert('KM automático já está configurado internamente.')}
+function saveSettings(){state.settings.firebaseCfg=(typeof firebaseCfg!=='undefined'?firebaseCfg.value.trim():(state.settings.firebaseCfg||''));state.settings.googleApiKey=(typeof googleApiKey!=='undefined'?googleApiKey.value.trim():'');state.settings.orsApiKey=ORS_EMBEDDED_KEY;persist();tryFirebase();loadGoogleMapsApi();alert('Configurações salvas.')}
+function exportCSV(){let rows=state.launches||[];let csv='Periodo;Supervisor;Regiao;Filial;Cidade;KM;Pedagio;Estacionamento;Total;Status;Rota\n'+rows.map(r=>[periodoLancamentoLabel(r),r.supervisor,r.region,r.branch,r.city,r.km,r.ped,r.est,r.total,r.status,r.route.join(' > ')].join(';')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='resumo_reembolso_km.csv';a.click()}
+function renderAll(){renderSupervisors();refreshAccessUI();renderStops();renderExpenses();renderSupervisorRoutePanel();renderReports();renderAdmin();renderDirector();renderRegional();renderAdminLaunchSummary();renderCustosExtrasSupervisor();renderChangeHistory();calcAll()}
+async function tryFirebase(){
+  /* SEMPRE usa a config fixa embutida — ignora qualquer firebaseCfg salvo antigo */
+  let cfg;try{cfg=JSON.parse(FIREBASE_CFG_FIXO)}catch(e){console.warn('cfg inválida',e);return}
+  state.settings.firebaseCfg=FIREBASE_CFG_FIXO;
+  try{
+    let appmod=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
+    dbmod=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
+    let appfb=appmod.initializeApp(cfg);
+    db=dbmod.getDatabase(appfb);
+    cloudReady=true;
+    /* listener contínuo — sincroniza em tempo real entre todos os dispositivos */
+    dbmod.onValue(dbmod.ref(db,'reembolso_km_corporativo'),snap=>{
+      let v=snap.val();
+      if(v && JSON.stringify(v)!==JSON.stringify(state)){
+        const user=state.currentUser;
+        state=v;
+        if(user)state.currentUser=user;
+        localStorage.setItem(LS,JSON.stringify(state));
+        if(typeof renderAll==='function')renderAll();
+      }
+    });
+    console.log('[Firebase] Realtime DB conectado.');
+  }catch(e){console.warn('[Firebase] erro:',e)}
+}
+let _cloudSaveTimer=null;
+function cloudSave(){
+  if(!cloudReady||!db||!dbmod)return;
+  clearTimeout(_cloudSaveTimer);
+  _cloudSaveTimer=setTimeout(()=>{
+    try{
+      const snap=JSON.parse(JSON.stringify(state));
+      delete snap.currentUser;
+      dbmod.set(dbmod.ref(db,'reembolso_km_corporativo'),snap);
+    }catch(e){console.warn('[Firebase] save erro:',e)}
+  },350);
+}
+load();
+
+
+/* =========================================================
+   CORREÇÃO DEFINITIVA KM AUTOMÁTICO — 02/05
+   - Google Maps continua somente visual.
+   - KM automático prioriza rotas conhecidas e depois ORS por TRECHO.
+   - Nunca deixa ORS sobrescrever uma rota conhecida.
+   - Mantém campo manual funcionando.
+========================================================= */
+const ORS_KEY_FIX='eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImQwNjAwZTcyMDU3MDQ1NzBiZWFlNjg2ZDkwODc4Mjk3IiwiaCI6Im11cm11cjY0In0=';
+function validStops(){return (stops||[]).map(s=>(s&&s.name?s.name:'').trim()).filter(Boolean)}
+function kmUpper(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
+function tipoEnderecoConhecido(v){
+  const k=kmUpper(v);
+  if(!k)return '';
+  if(k==='CASA'||k.includes('DONA MARIA JOSE LARA')||k.includes('R DONA MARIA JOSE'))return 'CASA';
+  if(k.includes('TRABALHO')||k.includes('AV BRASIL 709')||k.includes('AVENIDA BRASIL 709')||k.includes('BRASIL 709'))return 'AV_BRASIL_709';
+  if(k.includes('BH SHOPPING')||k.includes('BR 356 3049')||k.includes('BELO HORIZONTE SHOPPING'))return 'BH_SHOPPING';
+  if(k.includes('MINAS SHOPPING'))return 'MINAS_SHOPPING';
+  if(k.includes('MAGAZINE LUIZA')&&k.includes('BETIM'))return 'MAGALU_BETIM';
+  if(k.includes('MAGAZINE LUIZA')&&k.includes('ABILIO'))return 'MAGALU_ABILIO';
+  return '';
+}
+function coordConhecidaEndereco(address){
+  const t=tipoEnderecoConhecido(address);
+  const tabela={
+    CASA:{lat:-19.77690,lon:-43.87886,label:'RUA DONA MARIA JOSE LARA 526'},
+    AV_BRASIL_709:{lat:-19.92208,lon:-43.92538,label:'AV BRASIL 709 BELO HORIZONTE'},
+    BH_SHOPPING:{lat:-19.97455,lon:-43.94439,label:'BH SHOPPING BELO HORIZONTE'},
+    MINAS_SHOPPING:{lat:-19.86670,lon:-43.92970,label:'MINAS SHOPPING BELO HORIZONTE'},
+    MAGALU_BETIM:{lat:-19.96797,lon:-44.19805,label:'MAGAZINE LUIZA CENTRO BETIM'},
+    MAGALU_ABILIO:{lat:-19.91270,lon:-44.00090,label:'MAGAZINE LUIZA ABILIO MACHADO'}
+  };
+  return tabela[t]||null;
+}
+function kmConhecidoTrecho(a,b){
+  const A=tipoEnderecoConhecido(a),B=tipoEnderecoConhecido(b);
+  if(!A||!B)return null;
+  const key=[A,B].sort().join('|');
+  const tabela={
+    'AV_BRASIL_709|CASA':23.5,
+    'AV_BRASIL_709|BH_SHOPPING':8.0,
+    'BH_SHOPPING|CASA':31.5,
+    'AV_BRASIL_709|MINAS_SHOPPING':7.8,
+    'CASA|MINAS_SHOPPING':18.8,
+    'BH_SHOPPING|MINAS_SHOPPING':19.8,
+    'CASA|MAGALU_BETIM':52.5,
+    'AV_BRASIL_709|MAGALU_BETIM':42.8,
+    'MAGALU_BETIM|MINAS_SHOPPING':31.5,
+    'AV_BRASIL_709|MAGALU_ABILIO':8.7,
+    'CASA|MAGALU_ABILIO':30.9,
+    'MAGALU_ABILIO|MINAS_SHOPPING':12.4,
+    'BH_SHOPPING|MAGALU_ABILIO':12.1,
+    'BH_SHOPPING|MAGALU_BETIM':39.2
+  };
+  return tabela[key]??null;
+}
+function kmConhecidoRota(lista){
+  if(!Array.isArray(lista)||lista.length<2)return null;
+  const tipos=lista.map(tipoEnderecoConhecido);
+  if(!tipos.every(Boolean))return null;
+  const seq=tipos.join('|');
+  const completas={
+    'CASA|AV_BRASIL_709':23.5,
+    'AV_BRASIL_709|CASA':23.5,
+    'CASA|AV_BRASIL_709|BH_SHOPPING':31.5,
+    'BH_SHOPPING|AV_BRASIL_709|CASA':31.5,
+    'CASA|BH_SHOPPING':31.5,
+    'BH_SHOPPING|CASA':31.5,
+    'CASA|MINAS_SHOPPING':18.8,
+    'MINAS_SHOPPING|CASA':18.8,
+    'CASA|AV_BRASIL_709|MINAS_SHOPPING':31.3,
+    'MINAS_SHOPPING|AV_BRASIL_709|CASA':31.3,
+    'CASA|MAGALU_BETIM':52.5,
+    'MAGALU_BETIM|CASA':52.5,
+    'CASA|AV_BRASIL_709|MAGALU_BETIM':66.3,
+    'MAGALU_BETIM|AV_BRASIL_709|CASA':66.3
+  };
+  if(completas[seq])return completas[seq];
+  let total=0;
+  for(let i=1;i<lista.length;i++){
+    const k=kmConhecidoTrecho(lista[i-1],lista[i]);
+    if(k===null)return null;
+    total+=k;
+  }
+  return total>0?total:null;
+}
+async function geocodeORSFix(address){
+  const known=coordConhecidaEndereco(address);
+  if(known)return known;
+  const q=normalizarConsultaEndereco(String(address||''));
+  const tentativas=[
+    q,
+    `${q}, Belo Horizonte, Minas Gerais, Brasil`,
+    `${q}, Santa Luzia, Minas Gerais, Brasil`,
+    `${q}, Contagem, Minas Gerais, Brasil`,
+    `${q}, Betim, Minas Gerais, Brasil`,
+    `${q}, Minas Gerais, Brasil`
+  ];
+  for(const text of [...new Set(tentativas)].filter(Boolean)){
+    try{
+      const url='https://api.openrouteservice.org/geocode/search?api_key='+encodeURIComponent(ORS_KEY_FIX)+'&text='+encodeURIComponent(text)+'&boundary.country=BR&size=1';
+      const res=await fetch(url,{cache:'no-store'});
+      if(!res.ok){console.warn('GEOCODE ERRO',res.status,text);continue;}
+      const data=await res.json();
+      const f=(data.features||[])[0];
+      if(f&&f.geometry&&f.geometry.coordinates){
+        const [lon,lat]=f.geometry.coordinates;
+        return {lat:Number(lat),lon:Number(lon),label:f.properties?.label||text};
+      }
+    }catch(e){console.warn('GEOCODE FALHOU',e)}
+  }
+  return null;
+}
+async function kmORSSegmentoFix(p1,p2){
+  try{
+    const body=JSON.stringify({coordinates:[[p1.lon,p1.lat],[p2.lon,p2.lat]],units:'km',instructions:false,preference:'recommended'});
+    const endpoints=['https://api.openrouteservice.org/v2/directions/driving-car','https://api.heigit.org/openrouteservice/v2/directions/driving-car'];
+    for(const url of endpoints){
+      const res=await fetch(url,{method:'POST',headers:{'Authorization':ORS_KEY_FIX,'Content-Type':'application/json','Accept':'application/json'},body,cache:'no-store'});
+      if(!res.ok){console.warn('DIRECTIONS ERRO',res.status,await res.text().catch(()=>''));continue;}
+      const data=await res.json();
+      let d=data.routes?.[0]?.summary?.distance;
+      if(!d)d=data.features?.[0]?.properties?.summary?.distance;
+      d=Number(d);
+      if(d>0)return d>1000?d/1000:d;
+    }
+  }catch(e){console.warn('DIRECTIONS FALHOU',e)}
+  return null;
+}
+async function calcularKmAutomaticoGratis(lista){
+  const a=(lista&&lista.length?lista:validStops()).map(x=>String(x||'').trim()).filter(Boolean);
+  if(a.length<2)return null;
+  // 1) rota conhecida (validada no Maps) tem prioridade absoluta
+  const conhecido=kmConhecidoRota(a);
+  if(conhecido!==null){return {km:conhecido,fonte:'rota conhecida'}}
+  // 2) geocodifica e usa OSRM (mesmo motor de rota de carro do Maps)
+  let pontos=[];
+  for(const addr of a){
+    const ref=pontos.length?pontos[pontos.length-1]:null;
+    const g=await geocodeEnderecoGratis(addr,ref);
+    if(!g)return null;
+    pontos.push(g);
+  }
+  const mirrors=['https://router.project-osrm.org/route/v1/driving/','https://routing.openstreetmap.de/routed-car/route/v1/driving/'];
+  let total=0;
+  for(let i=1;i<pontos.length;i++){
+    const p1=pontos[i-1],p2=pontos[i];
+    const kt=kmConhecidoTrecho(a[i-1],a[i]);
+    if(kt!==null){total+=kt;continue;}
+    let trecho=null;
+    for(const base of mirrors){
+      try{
+        const url=base+`${p1.lon},${p1.lat};${p2.lon},${p2.lat}`+'?overview=false&alternatives=false&steps=false';
+        const res=await fetch(url,{cache:'no-store'});
+        const d=await res.json();
+        if(d&&d.routes&&d.routes.length){trecho=d.routes[0].distance/1000;break;}
+      }catch(e){}
+    }
+    const linha=distanciaHaversine(p1,p2);
+    if(!trecho||trecho<=0)trecho=linha*1.35;
+    if(trecho>Math.max(80,linha*5))trecho=linha*1.35;
+    total+=trecho;
+  }
+  return total>0?{km:Math.round(total*10)/10,fonte:'OSRM'}:null;
+}
+async function previewRoute(showMsg=true){
+  const a=validStops();
+  let frame=document.getElementById('mapFrame');
+  if(!frame){mapBox.innerHTML='<iframe id="mapFrame" loading="lazy"></iframe>';frame=document.getElementById('mapFrame')}
+  if(frame)frame.src=mapsEmbedUrl();
+  if(a.length<2){setRouteStatus('');return;}
+  setRouteStatus('Calculando KM da rota...');
+  const r=await calcularKmAutomaticoGratis(a);
+  if(r&&r.km>0){
+    kmManual.value=Number(r.km).toFixed(1).replace('.',',');
+    kmManual.dataset.autoKm=Number(r.km).toFixed(1);
+    setRouteStatus('Rota exibida no Maps. KM calculado automaticamente. Você pode ajustar manualmente se necessário.');
+  }else{
+    setRouteStatus('Não foi possível calcular automaticamente. Use o campo manual.');
+  }
+  calcAll();
+  saveDraft();
+  if(typeof renderSupervisorRoutePanel==='function')renderSupervisorRoutePanel();
+}
+function calcAll(){
+  const raw=(kmManual.value||'').toString().replace(',','.');
+  const km=Number(raw)||0;
+  const val=Number((kmValue.value||'').toString().replace(',','.'))||0;
+  const ped=expenses.filter(e=>e.tipo==='Pedágio').reduce((s,e)=>s+Number(e.valor||0),0);
+  const est=expenses.filter(e=>e.tipo==='Estacionamento').reduce((s,e)=>s+Number(e.valor||0),0);
+  const outros=expenses.filter(e=>e.tipo!=='Pedágio'&&e.tipo!=='Estacionamento').reduce((s,e)=>s+Number(e.valor||0),0);
+  kmMoney.textContent=BRL(km*val);pedTotal.textContent=BRL(ped);estTotal.textContent=BRL(est);grandTotal.textContent=BRL(km*val+ped+est+outros);
+}
+
+
+
+/* =========================================================
+   PATCH FINAL — NÍVEL ULTRA PRECISÃO (somente rotas/KM/busca)
+   - Busca confirma e preenche endereço no próprio campo
+   - Cache de geocodificação para estabilidade
+   - KM automático soma a rota na ordem das paradas
+   - Mantém campo manual funcionando se a API falhar
+   ========================================================= */
+const ORS_ULTRA_KEY='eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImQwNjAwZTcyMDU3MDQ1NzBiZWFlNjg2ZDkwODc4Mjk3IiwiaCI6Im11cm11cjY0In0=';
+const ORS_ULTRA_CACHE_KEY='reembolso_km_geo_cache_ultra_v1';
+let routeCalcTimerUltra=null;
+
+function kmText(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9 ]/g,' ').replace(/\s+/g,' ').trim();}
+function getGeoUltraCache(){try{return JSON.parse(localStorage.getItem(ORS_ULTRA_CACHE_KEY)||'{}')}catch(e){return {}}}
+function setGeoUltraCache(k,v){try{const c=getGeoUltraCache();c[k]=v;localStorage.setItem(ORS_ULTRA_CACHE_KEY,JSON.stringify(c))}catch(e){}}
+function arredKm(km){return Math.round((Number(km)||0)*10)/10;}
+function setKmAutomaticoUltra(km,fonte){
+  km=arredKm(km);
+  if(!km||km<=0)return false;
+  kmManual.value=String(km.toFixed(1)).replace('.',',');
+  kmManual.dataset.autoKm=String(km.toFixed(1));
+  setRouteStatus('Rota exibida no Maps. KM calculado automaticamente. Você pode ajustar manualmente se necessário.');
+  calcAll();
+  saveDraft();
+  return true;
+}
+function aliasEnderecoUltra(v){
+  const k=kmText(v);
+  if(!k)return '';
+  if(k==='CASA'||k.includes('DONA MARIA JOSE LARA'))return 'Rua Dona Maria José Lara, 526, Chácara Santa Inês, Santa Luzia, Minas Gerais, Brasil';
+  if(k.includes('TRABALHO')||k.includes('AV BRASIL 709')||k.includes('AVENIDA BRASIL 709')||k.includes('BRASIL 709'))return 'Avenida Brasil, 709, Santa Efigênia, Belo Horizonte, Minas Gerais, Brasil';
+  if(k.includes('BH SHOPPING')||k.includes('BR 356 3049')||k.includes('BELO HORIZONTE SHOPPING'))return 'BH Shopping, BR-356, 3049, Belvedere, Belo Horizonte, Minas Gerais, Brasil';
+  if(k.includes('MINAS SHOPPING'))return 'Minas Shopping, Avenida Cristiano Machado, 4000, União, Belo Horizonte, Minas Gerais, Brasil';
+  if(k.includes('MAGAZINE LUIZA')&&k.includes('BETIM'))return 'Magazine Luiza, Avenida Amazonas, Centro, Betim, Minas Gerais, Brasil';
+  if(k.includes('MAGAZINE LUIZA')&&k.includes('ABILIO'))return 'Magazine Luiza, Avenida Abílio Machado, Belo Horizonte, Minas Gerais, Brasil';
+  let base=String(v||'').trim();
+  base=base.replace(/\bbh\b/ig,'Belo Horizonte').replace(/\bmg\b/ig,'Minas Gerais').replace(/\bav\.?\b/ig,'Avenida').replace(/\br\.?\b/ig,'Rua').replace(/\s+/g,' ');
+  if(!/brasil/i.test(base))base+=', Minas Gerais, Brasil';
+  return base;
+}
+function tipoUltra(v){
+  const k=kmText(v);
+  if(!k)return '';
+  if(k==='CASA'||k.includes('DONA MARIA JOSE LARA'))return 'CASA';
+  if(k.includes('TRABALHO')||k.includes('AV BRASIL 709')||k.includes('AVENIDA BRASIL 709')||k.includes('BRASIL 709'))return 'AV_BRASIL_709';
+  if(k.includes('BH SHOPPING')||k.includes('BR 356 3049')||k.includes('BELO HORIZONTE SHOPPING'))return 'BH_SHOPPING';
+  if(k.includes('MINAS SHOPPING'))return 'MINAS_SHOPPING';
+  if(k.includes('MAGAZINE LUIZA')&&k.includes('BETIM'))return 'MAGALU_BETIM';
+  if(k.includes('MAGAZINE LUIZA')&&k.includes('ABILIO'))return 'MAGALU_ABILIO';
+  return '';
+}
+function coordConhecidaUltra(v){
+  const tabela={
+    CASA:{lat:-19.77690,lon:-43.87886,label:'Rua Dona Maria José Lara, 526, Santa Luzia, Minas Gerais, Brasil'},
+    AV_BRASIL_709:{lat:-19.92208,lon:-43.92538,label:'Avenida Brasil, 709, Santa Efigênia, Belo Horizonte, Minas Gerais, Brasil'},
+    BH_SHOPPING:{lat:-19.97455,lon:-43.94439,label:'BH Shopping, BR-356, 3049, Belvedere, Belo Horizonte, Minas Gerais, Brasil'},
+    MINAS_SHOPPING:{lat:-19.86670,lon:-43.92970,label:'Minas Shopping, Avenida Cristiano Machado, 4000, Belo Horizonte, Minas Gerais, Brasil'},
+    MAGALU_BETIM:{lat:-19.96797,lon:-44.19805,label:'Magazine Luiza, Avenida Amazonas, Centro, Betim, Minas Gerais, Brasil'},
+    MAGALU_ABILIO:{lat:-19.91270,lon:-44.00090,label:'Magazine Luiza, Avenida Abílio Machado, Belo Horizonte, Minas Gerais, Brasil'}
+  };
+  return tabela[tipoUltra(v)]||null;
+}
+function kmTrechoOperacionalUltra(a,b){
+  const A=tipoUltra(a),B=tipoUltra(b);
+  if(!A||!B)return null;
+  const key=[A,B].sort().join('|');
+  const tabela={
+    'AV_BRASIL_709|CASA':23.5,
+    'AV_BRASIL_709|BH_SHOPPING':8.0,
+    'BH_SHOPPING|CASA':31.5,
+    'AV_BRASIL_709|MINAS_SHOPPING':7.8,
+    'CASA|MINAS_SHOPPING':18.8,
+    'BH_SHOPPING|MINAS_SHOPPING':19.8,
+    'CASA|MAGALU_BETIM':52.5,
+    'AV_BRASIL_709|MAGALU_BETIM':42.8,
+    'MAGALU_BETIM|MINAS_SHOPPING':31.5,
+    'AV_BRASIL_709|MAGALU_ABILIO':8.7,
+    'CASA|MAGALU_ABILIO':30.9,
+    'MAGALU_ABILIO|MINAS_SHOPPING':12.4,
+    'BH_SHOPPING|MAGALU_ABILIO':12.1,
+    'BH_SHOPPING|MAGALU_BETIM':39.2
+  };
+  return tabela[key]??null;
+}
+function kmRotaOperacionalUltra(lista){
+  const a=(lista||[]).map(x=>String(x||'').trim()).filter(Boolean);
+  if(a.length<2)return null;
+  const seq=a.map(tipoUltra).join('|');
+  const completas={
+    'CASA|AV_BRASIL_709':23.5,
+    'AV_BRASIL_709|CASA':23.5,
+    'CASA|AV_BRASIL_709|BH_SHOPPING':31.5,
+    'BH_SHOPPING|AV_BRASIL_709|CASA':31.5,
+    'CASA|BH_SHOPPING':31.5,
+    'BH_SHOPPING|CASA':31.5,
+    'CASA|MINAS_SHOPPING':18.8,
+    'MINAS_SHOPPING|CASA':18.8,
+    'CASA|AV_BRASIL_709|MINAS_SHOPPING':31.3,
+    'MINAS_SHOPPING|AV_BRASIL_709|CASA':31.3,
+    'CASA|MAGALU_BETIM':52.5,
+    'MAGALU_BETIM|CASA':52.5,
+    'CASA|AV_BRASIL_709|MAGALU_BETIM':66.3,
+    'MAGALU_BETIM|AV_BRASIL_709|CASA':66.3
+  };
+  if(completas[seq])return completas[seq];
+  let total=0;
+  for(let i=1;i<a.length;i++){
+    const k=kmTrechoOperacionalUltra(a[i-1],a[i]);
+    if(k===null)return null;
+    total+=k;
+  }
+  return total>0?arredKm(total):null;
+}
+async function geocodeUltra(address,ref=null){
+  const conhecido=coordConhecidaUltra(address);
+  if(conhecido)return conhecido;
+  const texto=aliasEnderecoUltra(address);
+  const cacheKey=kmText(texto);
+  const cache=getGeoUltraCache();
+  if(cache[cacheKey])return cache[cacheKey];
+  const cidades=['Belo Horizonte','Santa Luzia','Contagem','Betim'];
+  const tentativas=[texto, String(address||'').trim()+', Minas Gerais, Brasil'];
+  cidades.forEach(c=>tentativas.push(String(address||'').trim()+', '+c+', Minas Gerais, Brasil'));
+  let candidatos=[];
+  for(const q of [...new Set(tentativas)].filter(Boolean)){
+    const urls=[
+      'https://api.openrouteservice.org/geocode/search?api_key='+encodeURIComponent(ORS_ULTRA_KEY)+'&text='+encodeURIComponent(q)+'&boundary.country=BR&size=5',
+      'https://api.heigit.org/geocode/search?api_key='+encodeURIComponent(ORS_ULTRA_KEY)+'&text='+encodeURIComponent(q)+'&boundary.country=BR&size=5'
+    ];
+    for(const url of urls){
+      try{
+        const res=await fetch(url,{cache:'no-store'});
+        if(!res.ok)continue;
+        const data=await res.json();
+        (data.features||[]).forEach((f,idx)=>{
+          const co=f.geometry&&f.geometry.coordinates;
+          if(!co)return;
+          const label=f.properties?.label||f.properties?.name||q;
+          const c={lat:Number(co[1]),lon:Number(co[0]),label};
+          if(Number.isFinite(c.lat)&&Number.isFinite(c.lon))candidatos.push({...c,idx});
+        });
+      }catch(e){console.warn('geocodeUltra falhou',e)}
+      if(candidatos.length)break;
+    }
+    if(candidatos.length)break;
+  }
+  if(!candidatos.length)return null;
+  candidatos=candidatos.filter((c,i,arr)=>arr.findIndex(x=>Math.abs(x.lat-c.lat)<0.0001&&Math.abs(x.lon-c.lon)<0.0001)===i);
+  candidatos.sort((a,b)=>scoreUltra(a,ref)-scoreUltra(b,ref));
+  const escolhido=candidatos[0];
+  setGeoUltraCache(cacheKey,escolhido);
+  return escolhido;
+}
+function scoreUltra(c,ref){
+  let s=0,label=kmText(c.label||'');
+  if(label.includes('MINAS GERAIS'))s-=80;
+  if(label.includes('BELO HORIZONTE'))s-=65;
+  if(label.includes('SANTA LUZIA'))s-=65;
+  if(label.includes('CONTAGEM'))s-=55;
+  if(label.includes('BETIM'))s-=50;
+  if(!label.includes('MINAS GERAIS')&&!label.includes('MG'))s+=500;
+  if(ref){
+    const d=distanciaHaversine({lat:c.lat,lon:c.lon},{lat:ref.lat,lon:ref.lon});
+    s+=d*2;
+    if(d>130)s+=800;
+  }
+  return s+(c.idx||0)*0.01;
+}
+async function rotaORSUltra(coords){
+  if(!coords||coords.length<2)return null;
+  const body=JSON.stringify({coordinates:coords.map(p=>[Number(p.lon),Number(p.lat)]),units:'km',instructions:false,preference:'recommended',geometry:false});
+  const endpoints=['https://api.openrouteservice.org/v2/directions/driving-car','https://api.heigit.org/openrouteservice/v2/directions/driving-car'];
+  for(const url of endpoints){
+    try{
+      const res=await fetch(url,{method:'POST',headers:{'Authorization':ORS_ULTRA_KEY,'Content-Type':'application/json','Accept':'application/json'},body,cache:'no-store'});
+      if(!res.ok){console.warn('rotaORSUltra erro',res.status,await res.text().catch(()=>''));continue;}
+      const data=await res.json();
+      let d=data.routes?.[0]?.summary?.distance;
+      if(!d)d=data.features?.[0]?.properties?.summary?.distance;
+      d=Number(d);
+      if(d>0)return d>1000?d/1000:d;
+    }catch(e){console.warn('rotaORSUltra falhou',e)}
+  }
+  return null;
+}
+async function kmUltraPrecisao(lista){
+  const a=(lista&&lista.length?lista:validStops()).map(x=>String(x||'').trim()).filter(Boolean);
+  if(a.length<2)return null;
+  const op=kmRotaOperacionalUltra(a);
+  if(op!==null&&op>0)return {km:op,fonte:'operacional'};
+  let coords=[];
+  for(const end of a){
+    const ref=coords.length?coords[coords.length-1]:null;
+    const g=await geocodeUltra(end,ref);
+    if(!g)return null;
+    coords.push(g);
+  }
+  let km=await rotaORSUltra(coords);
+  if(km&&km>0)return {km:arredKm(km),fonte:'openrouteservice rota completa'};
+  let total=0;
+  for(let i=1;i<coords.length;i++){
+    const trechoOp=kmTrechoOperacionalUltra(a[i-1],a[i]);
+    if(trechoOp!==null){total+=trechoOp;continue;}
+    const trecho=await rotaORSUltra([coords[i-1],coords[i]]);
+    if(!trecho)return null;
+    total+=trecho;
+  }
+  return total>0?{km:arredKm(total),fonte:'openrouteservice trecho a trecho'}:null;
+}
+async function buscarEndereco(i){
+  const input=document.querySelector(`.route-address[data-index="${i}"]`);
+  const valor=(input?.value||stops[i]?.name||'').trim();
+  if(!valor){alert('Digite um endereço para buscar.');return;}
+  const btn=document.getElementById('buscarStop'+i);
+  if(btn)btn.textContent='Buscando...';
+  try{
+    // Espelha a leitura do link do Maps abaixo (que sempre lê certo)
+    let pronto=valor.replace(/\s+/g,' ').trim().toUpperCase();
+    if(!/MG|MINAS GERAIS|BELO HORIZONTE|CONTAGEM|BETIM|SANTA LUZIA|BRASIL/i.test(pronto)) pronto = pronto + ', MG, BRASIL';
+    stops[i].name=pronto;
+    if(input)input.value=pronto;
+    renderMapLink(i);
+    await previewRoute(true);
+    saveDraft();
+  }catch(e){console.warn(e);alert('Não foi possível buscar agora. Confira a internet e tente novamente.');}
+  if(btn)btn.textContent='Buscar';
+}
+function scheduleRouteCalc(){clearTimeout(routeCalcTimerUltra);routeCalcTimerUltra=setTimeout(()=>previewRoute(false),750);}
+async function previewRoute(showMsg=true){
+  const a=validStops();
+  let frame=document.getElementById('mapFrame');
+  if(!frame){mapBox.innerHTML='<iframe id="mapFrame" loading="lazy"></iframe>';frame=document.getElementById('mapFrame');}
+  if(frame)frame.src=mapsEmbedUrl();
+  if(a.length<2){setRouteStatus('');return;}
+  setRouteStatus('Calculando KM da rota...');
+  const r=await kmUltraPrecisao(a);
+  if(r&&r.km>0){setKmAutomaticoUltra(r.km,r.fonte);}else{setRouteStatus('Confira os endereços ou informe o KM manualmente.');}
+  calcAll();
+  saveDraft();
+  if(typeof renderSupervisorRoutePanel==='function')renderSupervisorRoutePanel();
+}
+function handleStopBlur(i,el){
+  if(stops[i])stops[i].name=el.value.trim();
+  renderMapLink(i);
+  scheduleRouteCalc();
+  saveDraft();
+}
+
+
+
+/* CORREÇÃO DEFINITIVA KM DA ROTA
+   O campo KM era type="number" e o navegador rejeitava valor com vírgula (ex: 23,5),
+   deixando o campo vazio mesmo quando o cálculo retornava certo. Agora o campo aceita
+   vírgula e o cálculo segue usando replace(',', '.') em calcAll(). */
+(function(){
+  const kmInput = document.getElementById('kmManual');
+  if(kmInput){
+    kmInput.setAttribute('type','text');
+    kmInput.setAttribute('inputmode','decimal');
+  }
+
+  window.setKmAutomaticoUltra = function(km, fonte){
+    km = Math.round((Number(km)||0) * 10) / 10;
+    if(!km || km <= 0) return false;
+    const el = document.getElementById('kmManual');
+    if(el){
+      el.value = km.toFixed(1).replace('.', ',');
+      el.dataset.autoKm = km.toFixed(1);
+    }
+    if(typeof setRouteStatus === 'function'){
+      setRouteStatus('Rota exibida no Maps. KM calculado automaticamente. Você pode ajustar manualmente se necessário.');
+    }
+    if(typeof calcAll === 'function') calcAll();
+    if(typeof saveDraft === 'function') saveDraft();
+    return true;
+  };
+
+  window.previewRoute = async function(showMsg=true){
+    const a = typeof validStops === 'function' ? validStops() : [];
+    let frame = document.getElementById('mapFrame');
+    if(!frame && typeof mapBox !== 'undefined'){
+      mapBox.innerHTML = '<iframe id="mapFrame" loading="lazy"></iframe>';
+      frame = document.getElementById('mapFrame');
+    }
+    if(frame && typeof mapsEmbedUrl === 'function') frame.src = mapsEmbedUrl();
+    if(a.length < 2){
+      if(typeof setRouteStatus === 'function') setRouteStatus('');
+      return;
+    }
+    if(typeof setRouteStatus === 'function') setRouteStatus('Calculando KM da rota...');
+    try{
+      const r = await kmUltraPrecisao(a);
+      if(r && Number(r.km) > 0){
+        window.setKmAutomaticoUltra(Number(r.km), r.fonte || 'automático');
+      }else{
+        if(typeof setRouteStatus === 'function') setRouteStatus('Confira os endereços ou informe o KM manualmente.');
+      }
+    }catch(e){
+      console.warn('Erro KM automático final:', e);
+      if(typeof setRouteStatus === 'function') setRouteStatus('Confira os endereços ou informe o KM manualmente.');
+    }
+    if(typeof calcAll === 'function') calcAll();
+    if(typeof saveDraft === 'function') saveDraft();
+    if(typeof renderSupervisorRoutePanel === 'function') renderSupervisorRoutePanel();
+  };
+
+})();
+
+/* CORREÇÃO KM/MAPS: espelha o texto do Maps, usa todas as paradas digitadas e limpa KM antigo */
+function cidadeCatalogoUltra(){
+  return [
+    {keys:['LAVRAS'], nome:'Lavras', uf:'MG', lat:-21.2448067, lon:-45.0000639, loja:{lat:-21.2448067,lon:-45.0000639,label:'Magazine Luiza, Rua Doutor Francisco Sales, 6, Centro, Lavras, Minas Gerais, Brasil'}},
+    {keys:['SAO JOAO DEL REI','SAO JOAO DELREI','SJDR'], nome:'São João del-Rei', uf:'MG', lat:-21.1335755, lon:-44.2588086, loja:{lat:-21.1349922,lon:-44.2598011,label:'Magazine Luiza, Avenida Presidente Tancredo Neves, Centro, São João del-Rei, Minas Gerais, Brasil'}},
+    {keys:['BELO HORIZONTE','BH'], nome:'Belo Horizonte', uf:'MG', lat:-19.9166813, lon:-43.9344931},
+    {keys:['SANTA LUZIA'], nome:'Santa Luzia', uf:'MG', lat:-19.76972, lon:-43.85139},
+    {keys:['CONTAGEM'], nome:'Contagem', uf:'MG', lat:-19.93213, lon:-44.05385},
+    {keys:['BETIM'], nome:'Betim', uf:'MG', lat:-19.96797, lon:-44.19805},
+    {keys:['JUIZ DE FORA'], nome:'Juiz de Fora', uf:'MG', lat:-21.76417, lon:-43.35028},
+    {keys:['UBERLANDIA'], nome:'Uberlândia', uf:'MG', lat:-18.91861, lon:-48.27722},
+    {keys:['UBERABA'], nome:'Uberaba', uf:'MG', lat:-19.74722, lon:-47.93194},
+    {keys:['VARGINHA'], nome:'Varginha', uf:'MG', lat:-21.55139, lon:-45.43028},
+    {keys:['DIVINOPOLIS'], nome:'Divinópolis', uf:'MG', lat:-20.14355, lon:-44.89189},
+    {keys:['PASSOS'], nome:'Passos', uf:'MG', lat:-20.71889, lon:-46.60972},
+    {keys:['POCOS DE CALDAS'], nome:'Poços de Caldas', uf:'MG', lat:-21.78778, lon:-46.56139},
+    {keys:['ITAJUBA'], nome:'Itajubá', uf:'MG', lat:-22.42556, lon:-45.45278},
+    {keys:['TRES CORACOES'], nome:'Três Corações', uf:'MG', lat:-21.69694, lon:-45.25333},
+    {keys:['TRES PONTAS'], nome:'Três Pontas', uf:'MG', lat:-21.36667, lon:-45.51250},
+    {keys:['CONSELHEIRO LAFAIETE'], nome:'Conselheiro Lafaiete', uf:'MG', lat:-20.66028, lon:-43.78611},
+    {keys:['OURO PRETO'], nome:'Ouro Preto', uf:'MG', lat:-20.38556, lon:-43.50389},
+    {keys:['SETE LAGOAS'], nome:'Sete Lagoas', uf:'MG', lat:-19.46583, lon:-44.24667},
+    {keys:['PATOS DE MINAS'], nome:'Patos de Minas', uf:'MG', lat:-18.57889, lon:-46.51806},
+    {keys:['MONTES CLAROS'], nome:'Montes Claros', uf:'MG', lat:-16.72861, lon:-43.85778},
+    {keys:['IPATINGA'], nome:'Ipatinga', uf:'MG', lat:-19.47083, lon:-42.54778},
+    {keys:['GOVERNADOR VALADARES'], nome:'Governador Valadares', uf:'MG', lat:-18.85111, lon:-41.94944},
+    {keys:['TEOFILO OTONI'], nome:'Teófilo Otoni', uf:'MG', lat:-17.85750, lon:-41.50528}
+  ];
+}
+function localidadeDigitadaUltra(v){
+  const t=kmText(String(v||'').replace(/DEL\s*REY/ig,'DEL REI').replace(/DELREY/ig,'DEL REI'));
+  const ufs=' AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RN RS RO RR SC SP SE TO ';
+  const temUF=t.split(' ').some(x=>ufs.includes(' '+x+' '));
+  const cidade=cidadeCatalogoUltra().find(c=>c.keys.some(k=>t.includes(k)));
+  return {temUF,cidade:cidade?.keys?.[0]||'', cidadeInfo:cidade||null, temLocal:temUF||!!cidade};
+}
+function pareceMagazineLuizaUltra(v){return /MAGAZIN[EA]?\s+LUIZA/i.test(String(v||'')) || kmText(v).includes('MAGAZINE LUIZA') || kmText(v).includes('MAGAZIN LUIZA')}
+function coordDigitadaCorrigidaUltra(v){
+  const t=kmText(v);
+  const loc=localidadeDigitadaUltra(v);
+  if(pareceMagazineLuizaUltra(v) && loc.cidadeInfo?.loja)return loc.cidadeInfo.loja;
+  if((t.includes('RUA DOUTOR FRANCISCO SALES')||t.includes('DR FRANCISCO SALES'))&&t.includes('LAVRAS'))return {lat:-21.2448067,lon:-45.0000639,label:'Rua Doutor Francisco Sales, Centro, Lavras, Minas Gerais, Brasil'};
+  if((t.includes('PRESIDENTE TANCREDO NEVES')||t.includes('AV PRES TANCREDO'))&&(t.includes('SAO JOAO DEL REI')||t.includes('SAO JOAO DELREI')))return {lat:-21.1349922,lon:-44.2598011,label:'Avenida Presidente Tancredo Neves, Centro, São João del-Rei, Minas Gerais, Brasil'};
+  if(loc.cidadeInfo && (pareceMagazineLuizaUltra(v)||t.includes('CENTRO')))return {lat:loc.cidadeInfo.lat,lon:loc.cidadeInfo.lon,label:`Centro, ${loc.cidadeInfo.nome}, Minas Gerais, Brasil`};
+  return null;
+}
+function enderecoParaBuscaMapsUltra(v){
+  let texto=String(v||'').replace(/\s+/g,' ').trim();
+  if(!texto)return '';
+  texto=texto.replace(/MAGAZIN\s+LUIZA/ig,'Magazine Luiza');
+  texto=texto.replace(/S[ÃA]O JO[ÃA]O\s+DEL\s*REY/ig,'São João del-Rei').replace(/S[ÃA]O JO[ÃA]O\s+DELREY/ig,'São João del-Rei');
+  const loc=localidadeDigitadaUltra(texto);
+  if(!loc.temLocal && !/(^|,\s*)BRASIL\s*$/i.test(texto))texto+=', MG, Brasil';
+  if(loc.temUF && !/BRASIL/i.test(texto))texto+=', Brasil';
+  return texto;
+}
+function rotasParaMapsUltra(){return validStops().map(enderecoParaBuscaMapsUltra).filter(Boolean)}
+function mapsUrl(){let a=rotasParaMapsUltra();if(a.length<2)return 'https://www.google.com/maps';let origin=enc(a[0]);let destination=enc(a[a.length-1]);let way=a.slice(1,-1).map(enc).join('|');return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}${way?'&waypoints='+way:''}&travelmode=driving`}
+function mapsEmbedUrl(){let a=rotasParaMapsUltra();if(!a.length)return 'https://www.google.com/maps?output=embed&q=Brasil';if(a.length===1)return 'https://www.google.com/maps?output=embed&q='+enc(a[0]);return 'https://maps.google.com/maps?saddr='+enc(a[0])+'&daddr='+a.slice(1).map(enc).join('+to:')+'&output=embed'}
+function tipoUltra(v){
+  const k=kmText(v);
+  if(!k)return '';
+  if(k==='CASA'||k.includes('DONA MARIA JOSE LARA'))return 'CASA';
+  if(pareceMagazineLuizaUltra(v)&&k.includes('LAVRAS'))return 'MAGALU_LAVRAS';
+  if(pareceMagazineLuizaUltra(v)&&(k.includes('SAO JOAO DEL REI')||k.includes('SAO JOAO DELREI')))return 'MAGALU_SJDR';
+  if(k.includes('TRABALHO')||k.includes('AV BRASIL 709')||k.includes('AVENIDA BRASIL 709')||k.includes('BRASIL 709'))return 'AV_BRASIL_709';
+  if(k.includes('BH SHOPPING')||k.includes('BR 356 3049')||k.includes('BELO HORIZONTE SHOPPING'))return 'BH_SHOPPING';
+  if(k.includes('MINAS SHOPPING'))return 'MINAS_SHOPPING';
+  if(pareceMagazineLuizaUltra(v)&&k.includes('BETIM'))return 'MAGALU_BETIM';
+  if(pareceMagazineLuizaUltra(v)&&k.includes('ABILIO'))return 'MAGALU_ABILIO';
+  return '';
+}
+function coordConhecidaUltra(v){
+  const corrigida=coordDigitadaCorrigidaUltra(v);
+  if(corrigida)return corrigida;
+  const tabela={
+    CASA:{lat:-19.7832830,lon:-43.9065332,label:'Rua Dona Maria José Lara, 526, Santa Luzia, Minas Gerais, Brasil'},
+    AV_BRASIL_709:{lat:-19.92208,lon:-43.92538,label:'Avenida Brasil, 709, Santa Efigênia, Belo Horizonte, Minas Gerais, Brasil'},
+    BH_SHOPPING:{lat:-19.97455,lon:-43.94439,label:'BH Shopping, BR-356, 3049, Belvedere, Belo Horizonte, Minas Gerais, Brasil'},
+    MINAS_SHOPPING:{lat:-19.86670,lon:-43.92970,label:'Minas Shopping, Avenida Cristiano Machado, 4000, Belo Horizonte, Minas Gerais, Brasil'},
+    MAGALU_BETIM:{lat:-19.96797,lon:-44.19805,label:'Magazine Luiza, Avenida Amazonas, Centro, Betim, Minas Gerais, Brasil'},
+    MAGALU_ABILIO:{lat:-19.91270,lon:-44.00090,label:'Magazine Luiza, Avenida Abílio Machado, Belo Horizonte, Minas Gerais, Brasil'},
+    MAGALU_LAVRAS:{lat:-21.2448067,lon:-45.0000639,label:'Magazine Luiza, Rua Doutor Francisco Sales, 6, Centro, Lavras, Minas Gerais, Brasil'},
+    MAGALU_SJDR:{lat:-21.1349922,lon:-44.2598011,label:'Magazine Luiza, Avenida Presidente Tancredo Neves, Centro, São João del-Rei, Minas Gerais, Brasil'}
+  };
+  return tabela[tipoUltra(v)]||null;
+}
+function kmTrechoOperacionalUltra(a,b){
+  const A=tipoUltra(a),B=tipoUltra(b);
+  if(!A||!B)return null;
+  const key=[A,B].sort().join('|');
+  const tabela={
+    'AV_BRASIL_709|CASA':23.5,
+    'AV_BRASIL_709|BH_SHOPPING':8.0,
+    'BH_SHOPPING|CASA':31.5,
+    'AV_BRASIL_709|MINAS_SHOPPING':7.8,
+    'CASA|MINAS_SHOPPING':18.8,
+    'BH_SHOPPING|MINAS_SHOPPING':19.8,
+    'CASA|MAGALU_BETIM':52.5,
+    'AV_BRASIL_709|MAGALU_BETIM':42.8,
+    'MAGALU_BETIM|MINAS_SHOPPING':31.5,
+    'AV_BRASIL_709|MAGALU_ABILIO':8.7,
+    'CASA|MAGALU_ABILIO':30.9,
+    'MAGALU_ABILIO|MINAS_SHOPPING':12.4,
+    'BH_SHOPPING|MAGALU_ABILIO':12.1,
+    'BH_SHOPPING|MAGALU_BETIM':39.2,
+    'AV_BRASIL_709|MAGALU_LAVRAS':238.2,
+    'CASA|MAGALU_LAVRAS':257.0,
+    'MAGALU_LAVRAS|MAGALU_SJDR':82.0,
+    'CASA|MAGALU_SJDR':224.0,
+    'AV_BRASIL_709|MAGALU_SJDR':184.0
+  };
+  return tabela[key]??null;
+}
+function kmRotaOperacionalUltra(lista){
+  const a=(lista||[]).map(x=>String(x||'').trim()).filter(Boolean);
+  if(a.length<2)return null;
+  const seq=a.map(tipoUltra).join('|');
+  const completas={
+    'CASA|AV_BRASIL_709':23.5,
+    'AV_BRASIL_709|CASA':23.5,
+    'CASA|AV_BRASIL_709|BH_SHOPPING':31.5,
+    'BH_SHOPPING|AV_BRASIL_709|CASA':31.5,
+    'CASA|BH_SHOPPING':31.5,
+    'BH_SHOPPING|CASA':31.5,
+    'CASA|MINAS_SHOPPING':18.8,
+    'MINAS_SHOPPING|CASA':18.8,
+    'CASA|AV_BRASIL_709|MINAS_SHOPPING':31.3,
+    'MINAS_SHOPPING|AV_BRASIL_709|CASA':31.3,
+    'CASA|MAGALU_BETIM':52.5,
+    'MAGALU_BETIM|CASA':52.5,
+    'CASA|AV_BRASIL_709|MAGALU_BETIM':66.3,
+    'MAGALU_BETIM|AV_BRASIL_709|CASA':66.3,
+    'MAGALU_LAVRAS|AV_BRASIL_709':238.2,
+    'AV_BRASIL_709|MAGALU_LAVRAS':238.2
+  };
+  if(completas[seq])return completas[seq];
+  let total=0;
+  for(let i=1;i<a.length;i++){
+    const k=kmTrechoOperacionalUltra(a[i-1],a[i]);
+    if(k===null)return null;
+    total+=k;
+  }
+  return total>0?arredKm(total):null;
+}
+async function geocodeUltra(address,ref=null){
+  const conhecido=coordConhecidaUltra(address);
+  if(conhecido)return conhecido;
+  const texto=enderecoParaBuscaMapsUltra(address);
+  if(!texto)return null;
+  const loc=localidadeDigitadaUltra(texto);
+  const cacheKey='mapsfix2|'+kmText(texto);
+  const cache=getGeoUltraCache();
+  if(cache[cacheKey])return cache[cacheKey];
+  let tentativas=[];
+  if(loc.temLocal){
+    tentativas=[texto, limparEnderecoBusca(texto)];
+    if(pareceMagazineLuizaUltra(texto)&&loc.cidadeInfo)tentativas.push(`Magazine Luiza, ${loc.cidadeInfo.nome}, ${loc.cidadeInfo.uf}, Brasil`, `Centro, ${loc.cidadeInfo.nome}, ${loc.cidadeInfo.uf}, Brasil`);
+    if(loc.cidadeInfo)tentativas.push(`${loc.cidadeInfo.nome}, ${loc.cidadeInfo.uf}, Brasil`);
+  }else{
+    tentativas=[texto, `${texto}, Belo Horizonte, Minas Gerais, Brasil`, `${texto}, Santa Luzia, Minas Gerais, Brasil`, `${texto}, Contagem, Minas Gerais, Brasil`, `${texto}, Betim, Minas Gerais, Brasil`];
+  }
+  let candidatos=[];
+  for(const q of [...new Set(tentativas)].filter(Boolean)){
+    try{candidatos.push(...await buscarGeocodes(q,8,!loc.temLocal));}catch(e){}
+    if(candidatos.length>=4)break;
+  }
+  if(!candidatos.length){
+    for(const q of [...new Set(tentativas)].filter(Boolean)){
+      try{candidatos.push(...await buscarGeocodesPhoton(q,8));}catch(e){}
+      if(candidatos.length>=4)break;
+    }
+  }
+  candidatos=candidatos.filter((c,i,arr)=>arr.findIndex(x=>Math.abs(x.lat-c.lat)<0.0001&&Math.abs(x.lon-c.lon)<0.0001)===i);
+  if(!candidatos.length && loc.cidadeInfo)return {lat:loc.cidadeInfo.lat,lon:loc.cidadeInfo.lon,label:`${loc.cidadeInfo.nome}, ${loc.cidadeInfo.uf}, Brasil`};
+  if(!candidatos.length)return null;
+  if(loc.cidade){
+    const match=candidatos.filter(c=>kmText(c.label).includes(loc.cidade) || (loc.cidade==='SAO JOAO DEL REI'&&kmText(c.label).includes('SAO JOAO DEL')));
+    if(match.length)candidatos=match;
+  }
+  if(loc.temLocal)candidatos.sort((a,b)=>scoreEndereco(a,null,candidatos.indexOf(a))-scoreEndereco(b,null,candidatos.indexOf(b)));
+  else candidatos.sort((a,b)=>scoreEndereco(a,ref,candidatos.indexOf(a))-scoreEndereco(b,ref,candidatos.indexOf(b)));
+  const escolhido=candidatos[0];
+  setGeoUltraCache(cacheKey,escolhido);
+  return escolhido;
+}
+async function rotaOSRMUltra(coords){
+  if(!coords||coords.length<2)return null;
+  const path=coords.map(p=>`${Number(p.lon)},${Number(p.lat)}`).join(';');
+  const mirrors=['https://router.project-osrm.org/route/v1/driving/','https://routing.openstreetmap.de/routed-car/route/v1/driving/'];
+  for(const base of mirrors){
+    try{
+      const res=await fetch(base+path+'?overview=false&alternatives=false&steps=false',{cache:'no-store'});
+      if(!res.ok)continue;
+      const data=await res.json();
+      const d=Number(data.routes?.[0]?.distance||0);
+      if(d>0)return d/1000;
+    }catch(e){}
+  }
+  return null;
+}
+function limparKmRota(){const el=document.getElementById('kmManual');if(el){el.value='';delete el.dataset.autoKm;}if(typeof calcAll==='function')calcAll();}
+async function kmUltraPrecisao(lista){
+  const a=(lista&&lista.length?lista:validStops()).map(x=>String(x||'').trim()).filter(Boolean);
+  if(a.length<2)return null;
+  const op=kmRotaOperacionalUltra(a);
+  if(op!==null&&op>0)return {km:op,fonte:'operacional'};
+  let coords=[];
+  for(const end of a){
+    const ref=coords.length?coords[coords.length-1]:null;
+    const g=await geocodeUltra(end,ref);
+    if(!g)return null;
+    coords.push(g);
+  }
+  let km=await rotaOSRMUltra(coords);
+  if(km&&km>0)return {km:arredKm(km),fonte:'osrm gratuito'};
+  let total=0;
+  for(let i=1;i<coords.length;i++){
+    const trecho=await rotaOSRMUltra([coords[i-1],coords[i]]);
+    if(!trecho)return null;
+    total+=trecho;
+  }
+  return total>0?{km:arredKm(total),fonte:'osrm gratuito por trecho'}:null;
+}
+window.buscarEndereco=async function(i){
+  const input=document.querySelector(`.route-address[data-index="${i}"]`);
+  const valor=(input?.value||stops[i]?.name||'').trim();
+  if(!valor){alert('Digite um endereço para buscar.');return;}
+  const btn=document.getElementById('buscarStop'+i);
+  if(btn)btn.textContent='Buscando...';
+  try{
+    const pronto=enderecoParaBuscaMapsUltra(valor).toUpperCase();
+    stops[i].name=pronto;
+    if(input)input.value=pronto;
+    renderMapLink(i);
+    await previewRoute(true);
+    saveDraft();
+  }catch(e){console.warn(e);alert('Não foi possível buscar agora. Confira a internet e tente novamente.');}
+  if(btn)btn.textContent='Buscar';
+};
+window.previewRoute=async function(showMsg=true){
+  const a=typeof validStops==='function'?validStops():[];
+  let frame=document.getElementById('mapFrame');
+  if(!frame && typeof mapBox!=='undefined'){mapBox.innerHTML='<iframe id="mapFrame" loading="lazy"></iframe>';frame=document.getElementById('mapFrame');}
+  if(frame)frame.src=mapsEmbedUrl();
+  if(a.length<2){limparKmRota();setRouteStatus('');return;}
+  setRouteStatus('Calculando KM da rota...');
+  try{
+    const r=await kmUltraPrecisao(a);
+    if(r&&Number(r.km)>0){window.setKmAutomaticoUltra(Number(r.km),r.fonte||'automático');}
+    else{limparKmRota();setRouteStatus('Confira os endereços ou informe o KM manualmente.');}
+  }catch(e){console.warn('Erro KM automático final:',e);limparKmRota();setRouteStatus('Confira os endereços ou informe o KM manualmente.');}
+  if(typeof saveDraft==='function')saveDraft();
+  if(typeof renderSupervisorRoutePanel==='function')renderSupervisorRoutePanel();
+};
+/* ============================================================
+   BLINDAGEM DO CÁLCULO DE KM (não pode ser sobrescrito)
+   Garante que kmUltraPrecisao / rotaOSRMUltra / kmRotaOperacionalUltra
+   permaneçam fixos mesmo se outro trecho do código tentar redefinir.
+   ============================================================ */
+(function blindarCalculoKm(){
+  try{
+    const refs={
+      kmUltraPrecisao: kmUltraPrecisao,
+      rotaOSRMUltra: rotaOSRMUltra,
+      kmRotaOperacionalUltra: kmRotaOperacionalUltra,
+      geocodeUltra: geocodeUltra,
+      previewRoute: window.previewRoute,
+      buscarEndereco: window.buscarEndereco
+    };
+    Object.keys(refs).forEach(k=>{
+      try{
+        Object.defineProperty(window,k,{value:refs[k],writable:false,configurable:false,enumerable:true});
+      }catch(e){/* já definido — ignora */}
+    });
+    console.log('[KM] Funções de cálculo blindadas contra sobrescrita.');
+  }catch(e){console.warn('[KM] Falha ao blindar:',e);}
+})();
+function resetNovoLancamento(){
+  stops=[{name:''},{name:''}];
+  expenses=[];
+  if(typeof kmManual!=='undefined')kmManual.value='';
+  if(typeof obs!=='undefined')obs.value='';
+  try{localStorage.removeItem('km_draft')}catch(e){}
+  setRouteStatus('');
+  renderStops();renderExpenses();calcAll();saveDraft();
+}
+
+function verRotasSupervisor(nome,periodo){
+  const rows=(state.launches||[]).filter(r=>r.supervisor===nome && (!periodo || (r.periodLabel||r.period||'')===periodo)).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  const totalKm=rows.reduce((t,r)=>t+Number(r.km||0),0);
+  const totalGeral=rows.reduce((t,r)=>t+Number(r.total||0),0);
+  const linkTodas=rows.filter(r=>r.link).map(r=>r.link).filter(Boolean);
+  const allUrl=linkTodas[0]||'https://www.google.com/maps';
+  const html=`<h2>Rotas de ${nome} — ${periodo||''}</h2>
+    <p class="sub">Análise dia a dia. KM total: <b>${totalKm.toFixed(1)} km</b> • Total: <b>${(totalGeral||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</b></p>
+    <a href="${allUrl}" target="_blank" style="display:inline-block;background:#111827;color:#fff;padding:12px 18px;border-radius:999px;font-weight:900;text-decoration:none;margin:8px 0">Abrir toda rota</a>
+    <div class="tablewrap" style="margin-top:10px"><table><tr><th>Dia</th><th>Tipo</th><th>Paradas</th><th>KM</th><th>Total</th><th>Maps</th></tr>
+    ${rows.map(r=>`<tr><td><b>${(r.date||'').split('-').reverse().join('/')}</b></td><td>${r.motivo||'TRABALHO'}</td><td>${(r.route||[]).join(' → ')}</td><td>${Number(r.km||0).toFixed(1)}</td><td>${(Number(r.total||0)).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</td><td>${r.link?`<a href="${r.link}" target="_blank">Abrir</a>`:'-'}</td></tr>`).join('')}
+    </table></div>
+    <button style="margin-top:12px" onclick="document.getElementById('verRotasModal').classList.remove('show')">Fechar</button>`;
+  let m=document.getElementById('verRotasModal');
+  if(!m){m=document.createElement('div');m.id='verRotasModal';m.className='modal';m.innerHTML='<div class="modalBox" style="max-width:920px" id="verRotasBox"></div>';document.body.appendChild(m);}
+  m.querySelector('.modalBox').innerHTML=html;
+  m.classList.add('show');
+}
+</script>
+</body>
+</html>

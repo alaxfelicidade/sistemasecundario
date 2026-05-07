@@ -1196,10 +1196,16 @@ function saveLaunch(){
   obs.value='';
   advanceDaySelect();
   setDayType('TRABALHO');
-  localStorage.removeItem('km_draft');
-  renderStops();renderExpenses();calcAll();persist();renderAll();
-  try{const m=document.getElementById('successModal');if(m){m.classList.add('show');setTimeout(()=>m.classList.remove('show'),2200);}else{alert('Salvo com sucesso!');}}catch(e){alert('Salvo com sucesso!');}
-}
+localStorage.removeItem('km_draft');
+renderStops();
+renderExpenses();
+calcAll();
+persist();
+renderAll();
+
+const m = document.getElementById('successModal');
+m.classList.add('show');
+setTimeout(() => m.classList.remove('show'), 2200);
 function rowsScope(){let rows=state.launches||[];if(state.currentUser?.role==='supervisor')rows=rows.filter(r=>r.supervisor===state.currentUser.supervisor);return rows}
 function filteredRows(){let rows=rowsScope();let fr=(filterRegion?.value||'').toLowerCase(),st=filterStart?.value,en=filterEnd?.value;if(fr)rows=rows.filter(r=>(r.region||'').toLowerCase().includes(fr));if(st)rows=rows.filter(r=>r.date>=st);if(en)rows=rows.filter(r=>r.date<=en);return rows}
 function agg(rows,key){return rows.reduce((t,r)=>t+Number(r[key]||0),0)}

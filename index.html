@@ -504,8 +504,73 @@ let stops=[{name:''},{name:''}],expenses=[],favIndex=0,db=null,dbmod=null,cloudR
 let googleMap=null,googleDirectionsService=null,googleDirectionsRenderer=null,googleAutocompleteReady=false,routeCalcTimer=null,kmManualEditado=false;
 const BRL=n=>(Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const enc=encodeURIComponent;
-function persist(){localStorage.setItem(LS,JSON.stringify(state));cloudSave()}
-function load(){try{state=JSON.parse(localStorage.getItem(LS))||state}catch(e){} state.settings=state.settings||{}; state.supervisorProfiles=state.supervisorProfiles||{}; date.value=new Date().toISOString().slice(0,10); if(typeof updatePeriodDates==='function')setTimeout(updatePeriodDates,0); adminPass.value=state.settings.pass||'1234'; if(typeof firebaseCfg!=='undefined')firebaseCfg.value=state.settings.firebaseCfg||''; if(typeof googleApiKey!=='undefined')googleApiKey.value=state.settings.googleApiKey||''; if(typeof orsApiKey!=='undefined')orsApiKey.value=state.settings.orsApiKey||''; renderSupervisors(); renderStops(); renderExpenses(); safeRenderAll(); tryFirebase();}
+function persist(){
+  localStorage.setItem(LS,JSON.stringify(state));
+
+  if(state.currentUser){
+    localStorage.setItem(
+      'km_user_session',
+      JSON.stringify(state.currentUser)
+    );
+  }
+
+  cloudSave();
+}
+function load(){
+
+  try{
+    state=JSON.parse(localStorage.getItem(LS))||state;
+  }catch(e){}
+
+  try{
+    const sess=localStorage.getItem('km_user_session');
+
+    if(sess){
+      state.currentUser=JSON.parse(sess);
+    }
+  }catch(e){}
+
+  state.settings=state.settings||{};
+  state.supervisorProfiles=state.supervisorProfiles||{};
+
+  date.value=new Date().toISOString().slice(0,10);
+
+  if(typeof updatePeriodDates==='function'){
+    setTimeout(updatePeriodDates,0);
+  }
+
+  adminPass.value=state.settings.pass||'1234';
+
+  renderSupervisors();
+  renderStops();
+  renderExpenses();
+
+  safeRenderAll();
+
+  tryFirebase();
+
+  if(state.currentUser){
+
+    loginScreen.classList.add('hide');
+    app.classList.remove('hide');
+
+    if(state.currentUser.role==='gerencial'){
+
+      document.body.classList.add('is-admin');
+
+      document
+        .querySelectorAll('.gerencialOnly')
+        .forEach(e=>e.classList.remove('hide'));
+
+    }
+
+    sup.value=
+      state.currentUser.supervisor||
+      state.supervisors[0];
+
+    safeRenderAll();
+  }
+}
 function showAdminAccess(){adminAccessBox.classList.remove('hide');loginPass.focus()}
 function doLogin(){let role='gerencial';if((loginPass.value||'')!==state.settings.pass){alert('Senha incorreta.');return}state.currentUser={role,supervisor:loginSupervisor.value||state.supervisors[0],name:loginSupervisor.value||'ADM'};loginScreen.classList.add('hide');app.classList.remove('hide');sup.removeAttribute('disabled');
 sup.value=state.currentUser.supervisor;document.querySelectorAll('.gerencialOnly').forEach(e=>e.classList.remove('hide'));document.body.classList.add('is-admin');safeRenderAll();}
@@ -547,7 +612,25 @@ function safeRenderAll(){
     if(typeof renderChangeHistory==='function') renderChangeHistory();
   }catch(e){console.log(e);}
 }
-  function logout(){state.currentUser=null;document.body.classList.remove('is-admin');app.classList.add('hide');loginScreen.classList.remove('hide');}
+ function logout(){
+
+  state.currentUser=null;
+
+  localStorage.removeItem('km_user_session');
+
+  document.body.classList.remove('is-admin');
+
+  app.classList.add('hide');
+
+  loginScreen.classList.remove('hide');
+
+  renderSupervisors();
+
+  if(loginSupervisor){
+    loginSupervisor.value=
+      state.supervisors[0]||'';
+  }
+}
 function showTab(id,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');safeRenderAll()}
 
 const I18N_ZH={

@@ -526,7 +526,28 @@ setTimeout(()=>{
  }
 },100);
 
-function logout(){state.currentUser=null;document.body.classList.remove('is-admin');app.classList.add('hide');loginScreen.classList.remove('hide');}
+function safeRenderAll(){
+  try{
+    if(typeof renderReports==='function') renderReports();
+  }catch(e){console.log(e);}
+
+  try{
+    if(typeof renderAdmin==='function') renderAdmin();
+  }catch(e){console.log(e);}
+
+  try{
+    if(typeof renderSupervisorRoutePanel==='function') renderSupervisorRoutePanel();
+  }catch(e){console.log(e);}
+
+  try{
+    if(typeof renderCustosExtrasSupervisor==='function') renderCustosExtrasSupervisor();
+  }catch(e){console.log(e);}
+
+  try{
+    if(typeof renderChangeHistory==='function') renderChangeHistory();
+  }catch(e){console.log(e);}
+}
+  function logout(){state.currentUser=null;document.body.classList.remove('is-admin');app.classList.add('hide');loginScreen.classList.remove('hide');}
 function showTab(id,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');safeRenderAll()}
 
 const I18N_ZH={
